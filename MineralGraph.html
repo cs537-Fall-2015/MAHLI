@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>MIneral Distribution</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+        <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script type="text/javascript">
+            google.load("visualization", "1.1", {packages:["bar"]});
+                google.setOnLoadCallback(read_json);
+                 function read_json() {
+                         $.getJSON("Mineral.json", function(data) {
+                             
+                            var mydata = google.visualization.arrayToDataTable([
+                     ['Mineral Name', 'Mineral COunt'],
+               [data[0].name, data[0].count],
+               [data[1].name, data[1].count],
+               [data[2].name, data[2].count],
+               [data[3].name, data[3].count],
+               [data[4].name, data[4].count],
+               [data[5].name, data[5].count],
+               [data[6].name, data[6].count],
+               [data[7].name, data[7].count],
+               [data[8].name, data[8].count],
+               [data[9].name, data[9].count],
+            
+                     ]); 
+                     
+                     
+                     
+                     
+             var options = {
+               title: 'Batting average',
+               width: 900,
+               legend: { position: 'none' },
+               chart: { title: 'Mahli',
+                        subtitle: 'Mineral Distribution Graph(Top 9 Items)' },
+               bars: 'vertical', // Required for Material Bar Charts.
+               axes: {
+                 x: {
+                   0: { side: 'bottom', label: 'Count'} // Top x-axis.
+                 }
+               },
+               bar: { groupWidth: "90%" }
+             };
+            
+             var chart = new google.charts.Bar(document.getElementById('top_x_div'));
+             chart.draw(mydata, options);
+                         });
+                     
+             };
+        </script>
+    </head>
+    <body>
+        <div id="top_x_div" style="width: 900px; height: 500px;"></div>
+        
+    </body>
+</html>
