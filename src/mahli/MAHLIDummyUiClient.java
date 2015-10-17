@@ -43,11 +43,11 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 
 		public ButtonDemo() {
 			
-			Dimension d=new Dimension(1500,500);
+			Dimension d = new Dimension(700,500);
 	    	setPreferredSize(d);
 	    	setLocation(0, 0);
 	    	setBorder(BorderFactory.createLineBorder(Color.black));
-	    	ta=new JTextArea(8,100);
+	    	ta = new JTextArea(8,50);
 	    	ta.setLineWrap(true);
 	        ta.setWrapStyleWord(true);
 	        ta.setLocation(300, 300);
