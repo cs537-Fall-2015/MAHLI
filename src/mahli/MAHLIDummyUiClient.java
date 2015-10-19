@@ -36,7 +36,10 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 		gl.mainRun();
 
 	}
-
+	
+	/**
+	 * Create the GUI parameters
+	 */
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		
@@ -126,7 +129,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b12.setMnemonic(KeyEvent.VK_E);
 			b12.setActionCommand("EXIT");
 
-			// Listen for button actions
+			// set and listen for button actions
 			b1.addActionListener(this);
 			b11.addActionListener(this);
 			b2.addActionListener(this);
