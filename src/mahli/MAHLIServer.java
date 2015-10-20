@@ -32,6 +32,8 @@ public class MAHLIServer extends RoverServerRunnable {
 		Boolean imageStoreStatus = false;
 		Boolean imageReadStatus = false;
 		Boolean exitStatus = false;
+		Boolean DustCoverStatus = false;
+		Boolean LEDStatus = false;
 		File capturedFile = null;
 		File source = new File("images");
 		File destination = new File("captured");
@@ -75,10 +77,19 @@ public class MAHLIServer extends RoverServerRunnable {
 					command = 10;
 				else if(message.equals("MAHLI_Image_read"))
 					command = 11;
+				
 				else if(message.equals("EXIT"))
 					command = 12;
-				else 
+				else if(message.equals("Open_Dust_Cover"))
 					command = 13;
+				else if(message.equals("Close_Dust_Cover"))
+					command = 14;
+				else if(message.equals("Open_LED"))
+					command = 15;
+				else if(message.equals("Close_LED"))
+					command = 16;
+				else 
+					command = 17;
 				
 				// create ObjectOutputStream object
 				ObjectOutputStream outputToAnotherObject = new ObjectOutputStream(getRoverServerSocket().getSocket().getOutputStream());
@@ -249,18 +260,28 @@ public class MAHLIServer extends RoverServerRunnable {
             			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
             		}
 		                     break;
-		            case 9:  if(camOnStatus)
-            		{
-		            	imageCaptureStatus = true;
-		            	// System.out.println("Image Captured");
-		            	Random rand = new Random();
-		            	int index = rand.nextInt(source.list().length-1) + 1;
-		        		capturedFile = new File(source.list()[index]);
-		        		System.out.println(capturedFile);
-		            	outputToAnotherObject.writeObject("Image Captured - "+capturedFile.toString());
-		            	cb.done();
+		            case 9:  if( camOnStatus )
+            		
+		            {
+		            	
+		            				if(DustCoverStatus == true)
+		            				{
+								            	imageCaptureStatus = true;
+								            	// System.out.println("Image Captured");
+								            	Random rand = new Random();
+								            	int index = rand.nextInt(source.list().length-1) + 1;
+								        		capturedFile = new File(source.list()[index]);
+								        		System.out.println(capturedFile);
+								            	outputToAnotherObject.writeObject("Image Captured - "+capturedFile.toString());
+								            	cb.done();
 
-            		}
+		            				}
+		            				else
+		                    		{
+		                    			// System.out.println("Please turn on the camera to proceed");
+		                    			outputToAnotherObject.writeObject("Open Dust Cover");
+		                    		}
+		            }
             		else
             		{
             			// System.out.println("Please turn on the camera to proceed");
@@ -316,7 +337,103 @@ public class MAHLIServer extends RoverServerRunnable {
 		            	outputToAnotherObject.writeObject("Exit");
 		            	cb.done();
 		                     break;
-		            case 13: 
+		                     
+		            case 13:  if(camOnStatus)
+            		{
+            			if(DustCoverStatus){
+            				// System.out.println("Video is already turned ON");
+            				outputToAnotherObject.writeObject("Dust Cover  is already turned OPEN");
+            			}
+            			else
+            			{
+            				// System.out.println("Video is now turned ON");
+            				outputToAnotherObject.writeObject("Dust Cover is now OPEN");
+            				cb.done();
+            				DustCoverStatus = true;
+            			}	
+            		}
+            		else
+            		{
+            			// System.out.println("Please turn on the camera to proceed");
+            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+            		}
+		                     break;
+                    
+		            case 14:  
+		            	if(camOnStatus)
+	            		{
+		        		if(DustCoverStatus)
+		        		{
+		        			DustCoverStatus = false;
+		        			//System.out.println("Camera turned off");
+		        			outputToAnotherObject.writeObject("Dust Cover is close");
+		        			cb.done();
+		        		}
+		        		else
+		        		{
+		        			//System.out.println("Camera is already turned off");
+		        			outputToAnotherObject.writeObject("Dust Cover is already Close");
+		        		}
+		        }
+        		else
+        		{
+        			// System.out.println("Please turn on the camera to proceed");
+        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+        		}
+		                 break; 
+		                 
+		                 
+		          
+		            case 15:  
+	            		if(camOnStatus ){
+	            			
+	            			if(LEDStatus){
+	            			//System.out.println("Camera is already On");
+	            			outputToAnotherObject.writeObject("LED is already turned on");
+	            		}
+	            		else{
+	            			//System.out.println("Camera turned On");
+	            			LEDStatus = true;
+	            			MAHLIClient clientMahli = new MAHLIClient(port_power, null);
+	            			cb.done();
+	            			Thread client_3 = RoverThreadHandler.getRoverThreadHandler().getNewThread(clientMahli);
+	            			outputToAnotherObject.writeObject("LED turned on ");
+	            			client_3.start();
+	            			}
+		        		}
+        			else
+        			{
+        			// System.out.println("Please turn on the camera to proceed");
+        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+        			}
+	                     break;  
+		                 
+		            case 16:  
+		            	if(camOnStatus ){
+		        		if(LEDStatus)
+		        		{
+		        			LEDStatus = false;
+		        			//System.out.println("Camera turned off");
+		        			outputToAnotherObject.writeObject("LED turned off");
+		        			cb.done();
+		        		}
+		        		else
+		        		{
+		        			//System.out.println("Camera is already turned off");
+		        			outputToAnotherObject.writeObject("LED is already turned off");
+		        		}
+		            	}
+	        			else
+	        			{
+	        			// System.out.println("Please turn on the camera to proceed");
+	        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+	        			}
+		                 break;    
+		                     
+		                     
+		                     
+		                     
+		            case 17: 
 		            	outputToAnotherObject.writeObject("Invalid Command");
                     		 break;
 		            default: 
@@ -324,6 +441,9 @@ public class MAHLIServer extends RoverServerRunnable {
 		            		cb.done();
 		                     break;
 		        }
+		        
+		        
+		        
 		        
 		     // terminate the server if client sends exit request
 				if (message.equalsIgnoreCase("exit"))
