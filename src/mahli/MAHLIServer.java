@@ -337,7 +337,6 @@ public class MAHLIServer extends RoverServerRunnable {
 			// close the ServerSocket object
 			closeAll();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
