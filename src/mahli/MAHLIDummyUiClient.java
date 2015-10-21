@@ -38,7 +38,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	}
 	
 	/**
-	 * Create the GUI buttons, textare and layout parameters
+	 * Create the GUI buttons, text area and layout parameters
 	 */
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
