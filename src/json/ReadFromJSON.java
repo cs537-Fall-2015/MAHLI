@@ -15,7 +15,7 @@ public class ReadFromJSON {
 	public static void main(String[] args) {
 		
 		// The location of the data file to read from
-		String myFilePath = "C:\\Users\\hensan\\Documents\\workspace2\\MAHLI\\data2.json";
+		String myFilePath = "C:\\Users\\hensan\\Documents\\workspace2\\MAHLI\\data.json";
 		
 		// JSONParser is used to parse the data
 		JSONParser parser = new JSONParser();
@@ -26,16 +26,18 @@ public class ReadFromJSON {
 			// Create a JSONArray from the JSONObject
 			JSONArray jsonArray = (JSONArray) obj;
 			
-			System.out.printf("%-14s %s\n", "mineral name", "count");
-			System.out.println("------------   -----");
+			System.out.printf("%-3s %-13s %s\n", "#", "mineral name", "count");
+			System.out.println("--  ------------  -----");
 			
 			// Iterator to loop through the json array
+			int i = 1;
 			Iterator<JSONObject> iterator = jsonArray.iterator();
 			while(iterator.hasNext()){
 				JSONObject innerObject = (JSONObject) iterator.next();
 				String name = (String) innerObject.get("name");
 				Long count = (Long) innerObject.get("count");
-				System.out.printf("%-14s %d\n", name, count);
+				System.out.printf("%-3d %-13s %d\n", i, name, count);
+				i++;
 			}
 			
 		} catch (FileNotFoundException e) {
