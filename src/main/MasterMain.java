@@ -12,8 +12,8 @@ public class MasterMain {
 
 	public static void main(String[] args) {
 		//Each module has its own port
-		int port_mahli = 9010; // assigned port
-		int port_power = 9013; // assigned port
+		int port_mahli = 9010; 
+		int port_power = 9013;
 		
 		try {
 			// create a thread for module one
