@@ -2,7 +2,7 @@ package MAHLI.testMainMAHLI;
 
 import main.MasterMain;
 
-public class TestNainMAHLI {
+public class TestMainMAHLI {
 	
 	@SuppressWarnings("static-access")
 	public static void main(String[] args) {
