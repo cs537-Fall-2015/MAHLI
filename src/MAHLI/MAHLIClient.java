@@ -1,4 +1,4 @@
-package mahli;
+package MAHLI;
 
 import java.io.File;
 import java.io.ObjectInputStream;
@@ -8,9 +8,9 @@ import java.net.UnknownHostException;
 
 import generic.RoverClientRunnable;
 
-public class CopyOfMAHLIClient extends RoverClientRunnable{
+public class MAHLIClient extends RoverClientRunnable{
 
-	public CopyOfMAHLIClient(int port, InetAddress host)
+	public MAHLIClient(int port, InetAddress host)
 			throws UnknownHostException {
 		super(port, host);
 	}
@@ -51,20 +51,20 @@ public class CopyOfMAHLIClient extends RoverClientRunnable{
 	        }
 	        */
 		    
-		    File file = new File("CS540ColorTest.jpg");
-		    ProcessImage objprocessImage=new ProcessImage();
+		    //File file = new File("CS540ColorTest.jpg");
+		    //ProcessImage objprocessImage=new ProcessImage();
 		    //System.out.println(objprocessImage.getImageColor(file));
 		    
 		    
 		    outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
-		    outputToAnotherObject.writeObject("COLOR OF IMAGE IS ");
-		    objprocessImage.getImageColor(file);
-		    inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-            String message = (String) inputFromAnotherObject.readObject();
-            System.out.println("Module 1 Client: Message from Server - " + message.toUpperCase());
+		    outputToAnotherObject.writeObject("POWER_CAL 100");
+		    
+		    //inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
+            //String message = (String) inputFromAnotherObject.readObject();
+            //System.out.println("Module 1 Client: Message from Server - " + message.toUpperCase());
             
             //close resources
-            inputFromAnotherObject.close();
+            //inputFromAnotherObject.close();
             outputToAnotherObject.close();
             Thread.sleep(5000);
 	        closeAll();

@@ -1,4 +1,4 @@
-package mahli;
+package MAHLI;
 
 import java.util.ArrayList;
 public class ColorUtils {
