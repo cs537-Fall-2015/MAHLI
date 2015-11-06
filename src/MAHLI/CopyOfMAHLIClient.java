@@ -1,4 +1,4 @@
-package mahli;
+package MAHLI;
 
 import java.io.File;
 import java.io.ObjectInputStream;

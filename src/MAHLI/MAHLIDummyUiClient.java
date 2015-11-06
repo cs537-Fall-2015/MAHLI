@@ -1,4 +1,4 @@
-package mahli;
+package MAHLI;
 
 import java.awt.Color;
 import java.awt.Dimension;

@@ -4,8 +4,8 @@ import generic.RoverThreadHandler;
 
 import java.io.IOException;
 
-import mahli.MAHLIDummyUiClient;
-import mahli.MAHLIServer;
+import MAHLI.MAHLIDummyUiClient;
+import MAHLI.MAHLIServer;
 import module1.ModuleOneServer;
 
 public class MasterMain {
