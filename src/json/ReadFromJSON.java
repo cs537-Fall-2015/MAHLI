@@ -1,5 +1,6 @@
 package json;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,21 +11,21 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class ReadFromJSON {
-
+	
+	JSONObject jsonObject = new JSONObject();
+	JSONArray jsonArray = new JSONArray();
+	
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) {
-		
-		// The location of the data file to read from
-		String myFilePath = "C:\\Users\\hensan\\Documents\\workspace2\\MAHLI\\data.json";
-		
+	public void printJSONArray(File file){
 		// JSONParser is used to parse the data
 		JSONParser parser = new JSONParser();
 		
 		try {
 			// Object to hold the parsed json file
-			Object obj = parser.parse(new FileReader(myFilePath));
+			Object obj = parser.parse(new FileReader(file));
 			// Create a JSONArray from the JSONObject
-			JSONArray jsonArray = (JSONArray) obj;
+			jsonArray = (JSONArray) obj;
+			setJSONArray(jsonArray);
 			
 			System.out.printf("%-3s %-13s %s\n", "#", "mineral name", "count");
 			System.out.println("--  ------------  -----");
@@ -50,5 +51,13 @@ public class ReadFromJSON {
 			System.out.println("Parse exception found.");
 			e.printStackTrace();
 		}
+	}
+	
+	public JSONArray getJSONArray() {		
+		return jsonArray;
+	}
+	
+	public void setJSONArray(JSONArray jsonArray) {
+		this.jsonArray = jsonArray;
 	}
 }

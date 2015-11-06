@@ -43,7 +43,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		
-		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12;
+		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13;
 		protected JTextArea ta;
 		protected JScrollPane sp;
 
@@ -124,10 +124,14 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b11 = new JButton("MAHLI_Camera_OFF");
 			b11.setMnemonic(KeyEvent.VK_E);
 			b11.setActionCommand("MAHLI_Camera_OFF");
-
-			b12 = new JButton("EXIT");
+			
+			b12 = new JButton("MAHLI_Analyze_Image_Data");
 			b12.setMnemonic(KeyEvent.VK_E);
-			b12.setActionCommand("EXIT");
+			b12.setActionCommand("MAHLI_Analyze_Image_Data");
+
+			b13 = new JButton("EXIT");
+			b13.setMnemonic(KeyEvent.VK_E);
+			b13.setActionCommand("EXIT");			
 
 			// set and listen for button actions
 			b1.addActionListener(this);
@@ -142,6 +146,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b9.addActionListener(this);
 			b10.addActionListener(this);
 			b12.addActionListener(this);
+			b13.addActionListener(this);
 			
 			// set the text area parameters
 			ta = new JTextArea(50, 100);
@@ -162,6 +167,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	        buttonPanel.add(b9);
 	        buttonPanel.add(b10);
 	        buttonPanel.add(b12);
+	        buttonPanel.add(b13);
 	        
 	        // add the text area to the right panel
 	        outputPanel.add(sp);
