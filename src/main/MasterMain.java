@@ -11,7 +11,7 @@ import module1.ModuleOneServer;
 public class MasterMain {
 
 	public static void main(String[] args) {
-		//Each module has its own port
+		//Each module has its own port no.
 		int port_mahli = 9010;
 		int port_power = 9013;
 		
@@ -20,7 +20,7 @@ public class MasterMain {
 			ModuleOneServer serverOne = new ModuleOneServer(port_power);
 			Thread server_1 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverOne);
 						
-			//create a thread for module MAHLI
+			//create a thread for module MAHLI and start thread
 			MAHLIServer serverMahli = new MAHLIServer(port_mahli);
 
 // start the module MAHLI
