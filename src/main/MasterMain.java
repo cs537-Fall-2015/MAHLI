@@ -11,7 +11,7 @@ import module1.ModuleOneServer;
 public class MasterMain {
 
 	public static void main(String[] args) {
-		//Each module has its own port
+		//Each module has its own port no.
 		int port_mahli = 9010;
 		int port_power = 9013;
 		
