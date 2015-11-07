@@ -4,24 +4,26 @@ import generic.RoverThreadHandler;
 
 import java.io.IOException;
 
-import mahli.MAHLIDummyUiClient;
-import mahli.MAHLIServer;
+import MAHLI.MAHLIDummyUiClient;
+import MAHLI.MAHLIServer;
 import module1.ModuleOneServer;
 
 public class MasterMain {
 
 	public static void main(String[] args) {
-		//Each module has its own port
-		int port_mahli = 9010; //assign ports
+		//Each module has its own port no.
+		int port_mahli = 9010;
 		int port_power = 9013;
 		
 		try {
-			// create a thread for module one
+	// create a thread for module one and starting the 
 			ModuleOneServer serverOne = new ModuleOneServer(port_power);
 			Thread server_1 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverOne);
 						
-			//create a thread for module mahli
+			//create a thread for module MAHLI and start thread
 			MAHLIServer serverMahli = new MAHLIServer(port_mahli);
+
+// start the module MAHLI
 			Thread server_3 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverMahli);
 						
 			MAHLIDummyUiClient clientMahli = new MAHLIDummyUiClient(port_mahli, null);

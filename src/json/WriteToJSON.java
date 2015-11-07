@@ -6,9 +6,6 @@ import java.io.IOException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 public class WriteToJSON {
 
 	@SuppressWarnings("unchecked")
@@ -25,9 +22,6 @@ public class WriteToJSON {
 		// In this example it is written to my desktop
 		// If Example.json doesn't exist it will be created
 		String myFilePath = "C:\\Users\\hensan\\Documents\\workspace2\\MAHLI\\data2.json";
-		
-		// Gson is used to create a json object that is spaced nicely
-		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		
 		jsonArrayObject.put("count", 1234);
 		jsonArrayObject.put("name", "GOLD");
