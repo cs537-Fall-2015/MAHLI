@@ -16,12 +16,14 @@ public class MasterMain {
 		int port_power = 9013;
 		
 		try {
-			// create a thread for module one
+	// create a thread for module one and starting the thread
 			ModuleOneServer serverOne = new ModuleOneServer(port_power);
 			Thread server_1 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverOne);
 						
 			//create a thread for module MAHLI
 			MAHLIServer serverMahli = new MAHLIServer(port_mahli);
+
+// start the module MAHLI
 			Thread server_3 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverMahli);
 						
 			MAHLIDummyUiClient clientMahli = new MAHLIDummyUiClient(port_mahli, null);
