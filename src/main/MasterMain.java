@@ -12,7 +12,7 @@ public class MasterMain {
 
 	public static void main(String[] args) {
 		//Each module has its own port
-		int port_mahli = 9010; //assign ports11
+		int port_mahli = 9010;
 		int port_power = 9013;
 		
 		try {
@@ -20,7 +20,7 @@ public class MasterMain {
 			MahliServer serverOne = new MahliServer(port_power);
 			Thread server_1 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverOne);
 						
-			//create a thread for module MAHLIIS
+			//create a thread for module mahli
 			MAHLIServer serverMahli = new MAHLIServer(port_mahli);
 			Thread server_3 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverMahli);
 						

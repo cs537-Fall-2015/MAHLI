@@ -80,9 +80,9 @@ public class MAHLIServer extends RoverServerRunnable {
 				
 				else if(message.equals("EXIT"))
 					command = 12;
-				else if(message.equals("Open_Dust_Cover"))
+				else if(message.equals("MAHLI_Open_Dust_Cover"))
 					command = 13;
-				else if(message.equals("Close_Dust_Cover"))
+				else if(message.equals("MAHLI_Close_Dust_Cover"))
 					command = 14;
 				else if(message.equals("Open_LED"))
 					command = 15;
@@ -264,10 +264,10 @@ public class MAHLIServer extends RoverServerRunnable {
             		
 		            {
 		            	
-		            				if(DustCoverStatus == true)
+		            				if(DustCoverStatus)
 		            				{
 								            	imageCaptureStatus = true;
-								            	// System.out.println("Image Captured");
+								             System.out.println("Image Captured");
 								            	Random rand = new Random();
 								            	int index = rand.nextInt(source.list().length-1) + 1;
 								        		capturedFile = new File(source.list()[index]);

@@ -42,6 +42,8 @@ public class MAHLIDummyClient extends RoverClientRunnable{
 				System.out.println("10. MAHLI_Image_store");
 				System.out.println("11. MAHLI_Image_read");
 				System.out.println("12. EXIT");
+				System.out.println("13. MAHLI_Open_Dust_Cover");
+				System.out.println("14. MAHLI_Close_Dust_Cover");
 				System.out.println("Enter Command : ");
 				command = br.readLine();
 				//System.out.println(command);
