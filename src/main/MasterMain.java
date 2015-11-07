@@ -16,7 +16,7 @@ public class MasterMain {
 		int port_power = 9013;
 		
 		try {
-	// create a thread for module one and starting the thread
+	// create a thread for module one and starting the 
 			ModuleOneServer serverOne = new ModuleOneServer(port_power);
 			Thread server_1 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverOne);
 						
