@@ -43,7 +43,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		
-		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13;
+		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13,b14 ,b15,b16,b17;
 		protected JTextArea ta;
 		protected JScrollPane sp;
 
@@ -128,10 +128,26 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b12 = new JButton("MAHLI_Analyze_Image_Data");
 			b12.setMnemonic(KeyEvent.VK_E);
 			b12.setActionCommand("MAHLI_Analyze_Image_Data");
-
-			b13 = new JButton("EXIT");
+			
+			b13 = new JButton("Open_Dust_Cover");
 			b13.setMnemonic(KeyEvent.VK_E);
-			b13.setActionCommand("EXIT");			
+			b13.setActionCommand("Open_Dust_Cover");
+			
+			b14 = new JButton("Close_Dust_Cover");
+			b14.setMnemonic(KeyEvent.VK_E);
+			b14.setActionCommand("Close_Dust_Cover");
+			
+			b15 = new JButton("Open_LED");
+			b15.setMnemonic(KeyEvent.VK_E);
+			b15.setActionCommand("Open_LED");
+			
+			b16 = new JButton("Close_LED");
+			b16.setMnemonic(KeyEvent.VK_E);
+			b16.setActionCommand("Close_LED");
+
+			b17 = new JButton("EXIT");
+			b17.setMnemonic(KeyEvent.VK_E);
+			b17.setActionCommand("EXIT");			
 
 			// set and listen for button actions
 			b1.addActionListener(this);
@@ -147,6 +163,10 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b10.addActionListener(this);
 			b12.addActionListener(this);
 			b13.addActionListener(this);
+			b14.addActionListener(this);
+			b15.addActionListener(this);
+			b16.addActionListener(this);
+			b17.addActionListener(this);
 			
 			// set the text area parameters
 			ta = new JTextArea(50, 100);
@@ -168,7 +188,10 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	        buttonPanel.add(b10);
 	        buttonPanel.add(b12);
 	        buttonPanel.add(b13);
-	        
+	        buttonPanel.add(b14);
+	        buttonPanel.add(b15);
+	        buttonPanel.add(b16);
+	        buttonPanel.add(b17);
 	        // add the text area to the right panel
 	        outputPanel.add(sp);
 	        
