@@ -1,9 +1,5 @@
 package callback;
 
-/*	
- * Created by: 	Jonathan Young
- * Date: 		May 14, 2015
- */
 
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
@@ -30,12 +26,12 @@ public class CallBackClient extends RoverClientRunnable{
 
             outputToAnotherObject.writeObject("CCDS_DONE");
 
-            //close resources
+            //close all resources 
             outputToAnotherObject.close();
             closeAll();
 		}	        
         catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		catch (Exception error) {
