@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import mahli.MAHLIDummyUiClient;
 import mahli.MAHLIServer;
-import module1.ModuleOneServer;
+import module1.MahliServer;
 
 public class MasterMain {
 
@@ -17,7 +17,7 @@ public class MasterMain {
 		
 		try {
 			// create a thread for module one
-			ModuleOneServer serverOne = new ModuleOneServer(port_power);
+			MahliServer serverOne = new MahliServer(port_power);
 			Thread server_1 = RoverThreadHandler.getRoverThreadHandler().getNewThread(serverOne);
 						
 			//create a thread for module MAHLIIS

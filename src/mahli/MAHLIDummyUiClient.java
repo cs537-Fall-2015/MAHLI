@@ -43,7 +43,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		
-		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12;
+		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13;
 		protected JTextArea ta;
 		protected JScrollPane sp;
 
