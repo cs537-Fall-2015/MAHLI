@@ -70,7 +70,7 @@ public class MAHLIDummyClient extends RoverClientRunnable{
             String message = (String) inputFromAnotherObject.readObject();
             System.out.println("Module 1 Client: Message from Server - " + message.toUpperCase());*/
             
-            //close resources
+            
             inputFromAnotherObject.close();
             outputToAnotherObject.close();
             Thread.sleep(5000);
