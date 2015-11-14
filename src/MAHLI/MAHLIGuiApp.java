@@ -23,9 +23,9 @@ import javax.swing.JTextArea;
 
 import generic.RoverClientRunnable;
 
-public class MAHLIDummyUiClient extends RoverClientRunnable {
+public class MAHLIGuiApp extends RoverClientRunnable {
 
-	public MAHLIDummyUiClient(int port, InetAddress host)
+	public MAHLIGuiApp(int port, InetAddress host)
 			throws UnknownHostException {
 		super(port, host);
 	}
@@ -34,7 +34,6 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	public void run() {
 		GUILayout gl = new GUILayout();
 		gl.mainRun();
-
 	}
 	
 	/**
@@ -43,7 +42,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		
-		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13,b14 ,b15,b16,b17;
+		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14 , b15, b16, b17;
 		protected JTextArea ta;
 		protected JScrollPane sp;
 
@@ -58,7 +57,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			Dimension rightDimension = new Dimension(500,700);
 			
 			// create the panel to hold the buttons and output from the server
-			JPanel buttonPanel = new JPanel(new GridLayout(15, 1, 5, 5));
+			JPanel buttonPanel = new JPanel(new GridLayout(17, 1, 2, 2));
 			JPanel outputPanel = new JPanel(new GridLayout(1, 1));
 	        
 			// set the preferred panel size
@@ -66,7 +65,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	        outputPanel.setPreferredSize(rightDimension);
 	        
 	        // set the panel layout manager
-	        buttonPanel.setLayout(new GridLayout(15, 2, 5, 5));
+	        buttonPanel.setLayout(new GridLayout(17, 1, 2, 2));
 	        outputPanel.setLayout(new GridLayout());
 	        
 	        // set the panel background color
@@ -79,79 +78,75 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	        
 	        // set the buttons parameters
 			b1 = new JButton("MAHLI_Camera_ON");
-			b1.setVerticalTextPosition(AbstractButton.CENTER);
-			b1.setHorizontalTextPosition(AbstractButton.LEADING); 
-			b1.setMnemonic(KeyEvent.VK_D);
+			b1.setMnemonic(KeyEvent.VK_E);
 			b1.setActionCommand("MAHLI_Camera_ON");
+			
+			b2 = new JButton("MAHLI_Camera_OFF");
+			b2.setMnemonic(KeyEvent.VK_E);
+			b2.setActionCommand("MAHLI_Camera_OFF");
 
-			b2 = new JButton("MAHLI_NightIllumination_ON");
-			b2.setVerticalTextPosition(AbstractButton.BOTTOM);
-			b2.setHorizontalTextPosition(AbstractButton.CENTER);
-			b2.setMnemonic(KeyEvent.VK_M);
-
-			b3 = new JButton("MAHLI_NightIllumination_OFF");
+			b3 = new JButton("MAHLI_NightIllumination_ON");
 			b3.setMnemonic(KeyEvent.VK_E);
-			b3.setActionCommand("MAHLI_NightIllumination_OFF");
+			b3.setActionCommand("MAHLI_NightIllumination_ON");
 
-			b4 = new JButton("MAHLI_AutoFocus_ON");
+			b4 = new JButton("MAHLI_NightIllumination_OFF");
 			b4.setMnemonic(KeyEvent.VK_E);
-			b4.setActionCommand("MAHLI_AutoFocus_ON");
-
-			b5 = new JButton("MAHLI_AutoFocus_OFF");
+			b4.setActionCommand("MAHLI_NightIllumination_OFF");
+			
+			b5 = new JButton("MAHLI_Infrared_ON");
 			b5.setMnemonic(KeyEvent.VK_E);
-			b5.setActionCommand("MAHLI_AutoFocus_OFF");
-
-			b6 = new JButton("MAHLI_Video_ON");
+			b5.setActionCommand("MAHLI_Infrared_ON");
+			
+			b6 = new JButton("MAHLI_Infrared_OFF");
 			b6.setMnemonic(KeyEvent.VK_E);
-			b6.setActionCommand("MAHLI_Video_ON");
+			b6.setActionCommand("MAHLI_Infrared_OFF");
 
-			b7 = new JButton("MAHLI_Video_OFF");
+			b7 = new JButton("MAHLI_AutoFocus_ON");
 			b7.setMnemonic(KeyEvent.VK_E);
-			b7.setActionCommand("MAHLI_Video_OFF");
+			b7.setActionCommand("MAHLI_AutoFocus_ON");
 
-			b8 = new JButton("MAHLI_Image_Capture");
+			b8 = new JButton("MAHLI_AutoFocus_OFF");
 			b8.setMnemonic(KeyEvent.VK_E);
-			b8.setActionCommand("MAHLI_Image_Capture");
+			b8.setActionCommand("MAHLI_AutoFocus_OFF");
 
-			b9 = new JButton("MAHLI_Image_store");
+			b9 = new JButton("MAHLI_Video_ON");
 			b9.setMnemonic(KeyEvent.VK_E);
-			b9.setActionCommand("MAHLI_Image_store");
+			b9.setActionCommand("MAHLI_Video_ON");
 
-			b10 = new JButton("MAHLI_Image_read");
+			b10 = new JButton("MAHLI_Video_OFF");
 			b10.setMnemonic(KeyEvent.VK_E);
-			b10.setActionCommand("MAHLI_Image_read");
-
-			b11 = new JButton("MAHLI_Camera_OFF");
+			b10.setActionCommand("MAHLI_Video_OFF");
+			
+			b11 = new JButton("MAHLI_Dust_Cover_OPEN");
 			b11.setMnemonic(KeyEvent.VK_E);
-			b11.setActionCommand("MAHLI_Camera_OFF");
+			b11.setActionCommand("MAHLI_Dust_Cover_OPEN");
 			
-			b12 = new JButton("MAHLI_Analyze_Image_Data");
+			b12 = new JButton("MAHLI_Dust_Cover_CLOSE");
 			b12.setMnemonic(KeyEvent.VK_E);
-			b12.setActionCommand("MAHLI_Analyze_Image_Data");
-			
-			b13 = new JButton("Open_Dust_Cover");
-			b13.setMnemonic(KeyEvent.VK_E);
-			b13.setActionCommand("Open_Dust_Cover");
-			
-			b14 = new JButton("Close_Dust_Cover");
-			b14.setMnemonic(KeyEvent.VK_E);
-			b14.setActionCommand("Close_Dust_Cover");
-			
-			b15 = new JButton("Open_LED");
-			b15.setMnemonic(KeyEvent.VK_E);
-			b15.setActionCommand("Open_LED");
-			
-			b16 = new JButton("Close_LED");
-			b16.setMnemonic(KeyEvent.VK_E);
-			b16.setActionCommand("Close_LED");
+			b12.setActionCommand("MAHLI_Dust_Cover_CLOSE");
 
+			b13 = new JButton("MAHLI_Image_CAPTURE");
+			b13.setMnemonic(KeyEvent.VK_E);
+			b13.setActionCommand("MAHLI_Image_CAPTURE");
+
+			b14 = new JButton("MAHLI_Image_READ");
+			b14.setMnemonic(KeyEvent.VK_E);
+			b14.setActionCommand("MAHLI_Image_READ");
+
+			b15 = new JButton("MAHLI_Image_VIEW");
+			b15.setMnemonic(KeyEvent.VK_E);
+			b15.setActionCommand("MAHLI_Image_VIEW");
+			
+			b16 = new JButton("MAHLI_Image_ANALYZE");
+			b16.setMnemonic(KeyEvent.VK_E);
+			b16.setActionCommand("MAHLI_Image_ANALYZE");
+			
 			b17 = new JButton("EXIT");
 			b17.setMnemonic(KeyEvent.VK_E);
 			b17.setActionCommand("EXIT");			
 
 			// set and listen for button actions
 			b1.addActionListener(this);
-			b11.addActionListener(this);
 			b2.addActionListener(this);
 			b3.addActionListener(this);
 			b4.addActionListener(this);
@@ -161,6 +156,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b8.addActionListener(this);
 			b9.addActionListener(this);
 			b10.addActionListener(this);
+			b11.addActionListener(this);
 			b12.addActionListener(this);
 			b13.addActionListener(this);
 			b14.addActionListener(this);
@@ -176,7 +172,6 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 
 			// add all the buttons to the left panel
 	        buttonPanel.add(b1);
-	        buttonPanel.add(b11);
 	        buttonPanel.add(b2);
 	        buttonPanel.add(b3);
 	        buttonPanel.add(b4);
@@ -186,6 +181,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 	        buttonPanel.add(b8);
 	        buttonPanel.add(b9);
 	        buttonPanel.add(b10);
+	        buttonPanel.add(b11);
 	        buttonPanel.add(b12);
 	        buttonPanel.add(b13);
 	        buttonPanel.add(b14);
@@ -203,36 +199,25 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 		public void actionPerformed(ActionEvent e) {
 			ObjectOutputStream outputToAnotherObject = null;
 			ObjectInputStream inputFromAnotherObject = null;
-
+			
 			String command;
 			String reply = "";
-
 			command = e.getActionCommand();
-
+			
 			try {
 				outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
 				outputToAnotherObject.writeObject(command);
 				inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-				reply = (String) inputFromAnotherObject.readObject();
-			} catch (ClassNotFoundException | IOException e1) {
+				reply = String.valueOf(inputFromAnotherObject.readObject());
+				ta.append("MAHLI SERVER: " + reply);
+				ta.append("\n");
+				
+				if(reply.equalsIgnoreCase("exit")){
+					Thread.sleep(10000);
+					System.exit(0);
+				}
+			} catch (ClassNotFoundException | IOException | InterruptedException e1) {
 				e1.printStackTrace();
-			}
-			ta.append("MAHLI CLIENT : Response from server - " + reply);
-			ta.append("\n");
-			
-			if(reply.equalsIgnoreCase("exit"))
-				System.exit(0);
-
-		}
-
-		/** Returns an ImageIcon, or null if the path was invalid. */
-		protected  ImageIcon createImageIcon(String path) {
-			java.net.URL imgURL = GUILayout.class.getResource(path);
-			if (imgURL != null) {
-				return new ImageIcon(imgURL);
-			} else {
-				System.err.println("Couldn't find file: " + path);
-				return null;
 			}
 		}
 
@@ -243,17 +228,17 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 		private void createAndShowGUI() {
 
 			// Create and set up the window.
-			JFrame frame = new JFrame("MAHLI Simulator App");
-			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			JFrame guiFrame = new JFrame("MAHLI Simulator App");
+			guiFrame.setDefaultCloseOperation(guiFrame.EXIT_ON_CLOSE);
 
 			// Create and set up the content pane.
 			GUILayout newContentPane = new GUILayout();
 			newContentPane.setOpaque(true); // content panes must be opaque
-			frame.setContentPane(newContentPane);
+			guiFrame.setContentPane(newContentPane);
 
 			// Display the window.
-			frame.pack();
-			frame.setVisible(true);
+			guiFrame.pack();
+			guiFrame.setVisible(true);
 		}
 
 		public void mainRun() {

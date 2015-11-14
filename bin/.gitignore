@@ -1,8 +1,16 @@
 /MAHLI/
+<<<<<<< HEAD
 /READ ME.rtf
+=======
+/callback/
+/generic/
+>>>>>>> refs/heads/master
 /json/
+<<<<<<< HEAD
 /libs/
 /callback/
 /generic/
+=======
+>>>>>>> refs/heads/master
 /main/
 /module1/

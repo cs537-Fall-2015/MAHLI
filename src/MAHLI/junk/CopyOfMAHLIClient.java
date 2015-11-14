@@ -1,4 +1,4 @@
-package MAHLI;
+package MAHLI.junk;
 
 import java.io.File;
 import java.io.ObjectInputStream;
@@ -6,11 +6,12 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import MAHLI.ProcessImage;
 import generic.RoverClientRunnable;
 
-public class MAHLIClient extends RoverClientRunnable{
+public class CopyOfMAHLIClient extends RoverClientRunnable{
 
-	public MAHLIClient(int port, InetAddress host)
+	public CopyOfMAHLIClient(int port, InetAddress host)
 			throws UnknownHostException {
 		super(port, host);
 	}
@@ -51,20 +52,20 @@ public class MAHLIClient extends RoverClientRunnable{
 	        }
 	        */
 		    
-		    //File file = new File("CS540ColorTest.jpg");
-		    //ProcessImage objprocessImage=new ProcessImage();
+		    File file = new File("CS540ColorTest.jpg");
+		    ProcessImage objprocessImage=new ProcessImage();
 		    //System.out.println(objprocessImage.getImageColor(file));
 		    
 		    
 		    outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
-		    outputToAnotherObject.writeObject("POWER_CAL 100");
-		    
-		    //inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-            //String message = (String) inputFromAnotherObject.readObject();
-            //System.out.println("Module 1 Client: Message from Server - " + message.toUpperCase());
+		    outputToAnotherObject.writeObject("COLOR OF IMAGE IS ");
+		    objprocessImage.getImageColor(file);
+		    inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
+            String message = (String) inputFromAnotherObject.readObject();
+            System.out.println("Module 1 Client: Message from Server - " + message.toUpperCase());
             
             //close resources
-            //inputFromAnotherObject.close();
+            inputFromAnotherObject.close();
             outputToAnotherObject.close();
             Thread.sleep(5000);
 	        closeAll();
