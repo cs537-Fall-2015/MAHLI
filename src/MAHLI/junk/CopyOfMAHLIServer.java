@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
+
 import generic.RoverServerRunnable;
 
 public class CopyOfMAHLIServer extends RoverServerRunnable {
@@ -14,11 +17,21 @@ public class CopyOfMAHLIServer extends RoverServerRunnable {
 
 	@Override
 	public void run() {
+		
+		
 
 		try {
 			while (true) {
 				
+				final JTextArea mytextArea = null;
+				
 				System.out.println("Module MAHLI Server: Waiting for client request");
+				
+				SwingUtilities.invokeLater(new Runnable(){
+					  public void run(){
+					    mytextArea.append( "Module MAHLI Server: Waiting for client request" );
+					  }
+					});
 				
 				// creating socket and waiting for client connection
 				getRoverServerSocket().openSocket();
