@@ -25,8 +25,7 @@ import generic.RoverClientRunnable;
 
 public class MAHLIGuiApp extends RoverClientRunnable {
 
-	public MAHLIGuiApp(int port, InetAddress host)
-			throws UnknownHostException {
+	public MAHLIGuiApp(int port, InetAddress host) throws UnknownHostException {
 		super(port, host);
 	}
 
@@ -35,52 +34,60 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 		GUILayout gl = new GUILayout();
 		gl.mainRun();
 	}
-	
+
 	/**
 	 * Create the GUI buttons, text area and layout parameters
 	 */
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
-		
-		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14 , b15, b16, b17;
-		protected JTextArea ta;
-		protected JScrollPane sp;
+
+		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14, b15, b16, b17;
+		protected JTextArea ta, sta;
+		protected JScrollPane sp, ssp;
 
 		public GUILayout() {
 			// set the window layout manager
 			setLayout(new FlowLayout());
 			// set the window location when it starts
-	        setLocation(0, 0);
-			
-	        // set the dimensions for the panels
-			Dimension leftDimension = new Dimension(200,700);
-			Dimension rightDimension = new Dimension(500,700);
-			
+			setLocation(0, 0);
+
+			// set the dimensions for the panels
+			Dimension leftDimension = new Dimension(200, 700);
+			Dimension topDimension = new Dimension(500, 350);
+			Dimension bottomDimension = new Dimension(500, 350);
+			// Dimension rightDimension = new Dimension(500,700);
+
 			// create the panel to hold the buttons and output from the server
 			JPanel buttonPanel = new JPanel(new GridLayout(17, 1, 2, 2));
 			JPanel outputPanel = new JPanel(new GridLayout(1, 1));
-	        
+			JPanel outputServerPanel = new JPanel(new GridLayout(2, 1));
+			//outputServerPanel.setLocation(200,0);
+
 			// set the preferred panel size
-	        buttonPanel.setPreferredSize(leftDimension);
-	        outputPanel.setPreferredSize(rightDimension);
-	        
-	        // set the panel layout manager
-	        buttonPanel.setLayout(new GridLayout(17, 1, 2, 2));
-	        outputPanel.setLayout(new GridLayout());
-	        
-	        // set the panel background color
-	        buttonPanel.setBackground(Color.DARK_GRAY);
-	        outputPanel.setBackground(Color.YELLOW);
-	        
-	        // set the panel to be visible
-	        buttonPanel.setVisible(true);
-	        outputPanel.setVisible(true);
-	        
-	        // set the buttons parameters
+			buttonPanel.setPreferredSize(leftDimension);
+			outputPanel.setPreferredSize(topDimension);
+			outputServerPanel.setPreferredSize(bottomDimension);
+
+			// set the panel layout manager
+			buttonPanel.setLayout(new GridLayout(17, 1, 2, 2));
+			outputPanel.setLayout(new GridLayout());
+			outputServerPanel.setLayout(new GridLayout());
+
+			// set the panel background color
+			buttonPanel.setBackground(Color.DARK_GRAY);
+			outputPanel.setBackground(Color.YELLOW);
+			outputServerPanel.setBackground(Color.WHITE);
+
+			// set the panel to be visible
+			buttonPanel.setVisible(true);
+			outputPanel.setVisible(true);
+			outputServerPanel.setVisible(true);
+
+			// set the buttons parameters
 			b1 = new JButton("MAHLI_Camera_ON");
 			b1.setMnemonic(KeyEvent.VK_E);
 			b1.setActionCommand("MAHLI_Camera_ON");
-			
+
 			b2 = new JButton("MAHLI_Camera_OFF");
 			b2.setMnemonic(KeyEvent.VK_E);
 			b2.setActionCommand("MAHLI_Camera_OFF");
@@ -92,11 +99,11 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b4 = new JButton("MAHLI_NightIllumination_OFF");
 			b4.setMnemonic(KeyEvent.VK_E);
 			b4.setActionCommand("MAHLI_NightIllumination_OFF");
-			
+
 			b5 = new JButton("MAHLI_Infrared_ON");
 			b5.setMnemonic(KeyEvent.VK_E);
 			b5.setActionCommand("MAHLI_Infrared_ON");
-			
+
 			b6 = new JButton("MAHLI_Infrared_OFF");
 			b6.setMnemonic(KeyEvent.VK_E);
 			b6.setActionCommand("MAHLI_Infrared_OFF");
@@ -116,11 +123,11 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b10 = new JButton("MAHLI_Video_OFF");
 			b10.setMnemonic(KeyEvent.VK_E);
 			b10.setActionCommand("MAHLI_Video_OFF");
-			
+
 			b11 = new JButton("MAHLI_Dust_Cover_OPEN");
 			b11.setMnemonic(KeyEvent.VK_E);
 			b11.setActionCommand("MAHLI_Dust_Cover_OPEN");
-			
+
 			b12 = new JButton("MAHLI_Dust_Cover_CLOSE");
 			b12.setMnemonic(KeyEvent.VK_E);
 			b12.setActionCommand("MAHLI_Dust_Cover_CLOSE");
@@ -136,15 +143,16 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b15 = new JButton("MAHLI_Image_VIEW");
 			b15.setMnemonic(KeyEvent.VK_E);
 			b15.setActionCommand("MAHLI_Image_VIEW");
-			
+
 			b16 = new JButton("MAHLI_Image_ANALYZE");
 			b16.setMnemonic(KeyEvent.VK_E);
 			b16.setActionCommand("MAHLI_Image_ANALYZE");
-			
+
 			b17 = new JButton("EXIT");
 			b17.setMnemonic(KeyEvent.VK_E);
 			b17.setActionCommand("EXIT");
 			b17.setBackground(Color.red);
+
 
 			// set and listen for button actions
 			b1.addActionListener(this);
@@ -164,56 +172,69 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b15.addActionListener(this);
 			b16.addActionListener(this);
 			b17.addActionListener(this);
-			
+
 			// set the text area parameters
 			ta = new JTextArea(50, 100);
-	    	ta.setLineWrap(true);
-	        ta.setWrapStyleWord(true);
-	        sp = new JScrollPane(ta);
+			ta.setLineWrap(true);
+			ta.setWrapStyleWord(true);
+			sp = new JScrollPane(ta);
+
+			// set the text area parameters for the server output
+			sta = new JTextArea(50, 100);
+			sta.setLineWrap(true);
+			sta.setWrapStyleWord(true);
+			ssp = new JScrollPane(sta);
 
 			// add all the buttons to the left panel
-	        buttonPanel.add(b1);
-	        buttonPanel.add(b2);
-	        buttonPanel.add(b3);
-	        buttonPanel.add(b4);
-	        buttonPanel.add(b5);
-	        buttonPanel.add(b6);
-	        buttonPanel.add(b7);
-	        buttonPanel.add(b8);
-	        buttonPanel.add(b9);
-	        buttonPanel.add(b10);
-	        buttonPanel.add(b11);
-	        buttonPanel.add(b12);
-	        buttonPanel.add(b13);
-	        buttonPanel.add(b14);
-	        buttonPanel.add(b15);
-	        buttonPanel.add(b16);
-	        buttonPanel.add(b17);
-	        // add the text area to the right panel
-	        outputPanel.add(sp);
-	        
-	        // add the panel to the main GUI panel
-	        add(buttonPanel);
-	        add(outputPanel);
+			buttonPanel.add(b1);
+			buttonPanel.add(b2);
+			buttonPanel.add(b3);
+			buttonPanel.add(b4);
+			buttonPanel.add(b5);
+			buttonPanel.add(b6);
+			buttonPanel.add(b7);
+			buttonPanel.add(b8);
+			buttonPanel.add(b9);
+			buttonPanel.add(b10);
+			buttonPanel.add(b11);
+			buttonPanel.add(b12);
+			buttonPanel.add(b13);
+			buttonPanel.add(b14);
+			buttonPanel.add(b15);
+			buttonPanel.add(b16);
+			buttonPanel.add(b17);
+			// add the text area to the right panel
+			outputPanel.add(sp);
+			outputPanel.add(ssp);
+
+			// add the panel to the main GUI panel
+			add(buttonPanel);
+			add(outputPanel);
+			//add(outputServerPanel);
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			ObjectOutputStream outputToAnotherObject = null;
 			ObjectInputStream inputFromAnotherObject = null;
-			
+			// ObjectInputStream inputFromAnotherServerObject = null;
+
 			String command;
 			String reply = "";
 			command = e.getActionCommand();
-			
+
 			try {
 				outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
 				outputToAnotherObject.writeObject(command);
 				inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
+				// inputFromAnotherServerObject = new
+				// ObjectInputStream(getRoverSocket().getSocket().getInputStream());
 				reply = String.valueOf(inputFromAnotherObject.readObject());
 				ta.append("MAHLI SERVER: " + reply);
 				ta.append("\n");
-				
-				if(reply.equalsIgnoreCase("exit")){
+				sta.append("MAHLI: " + command);
+				sta.append("\n");
+
+				if (reply.equalsIgnoreCase("exit")) {
 					Thread.sleep(10000);
 					System.exit(0);
 				}
