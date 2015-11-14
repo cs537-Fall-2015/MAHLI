@@ -117,7 +117,7 @@ public class MAHLIDummyUiClient extends RoverClientRunnable {
 			b9.setMnemonic(KeyEvent.VK_E);
 			b9.setActionCommand("MAHLI_Image_store");
 
-			b10 = new JButton("MAHLI_Image_read");
+			b10 = new JButton("MAHLI_Image_read_dsiplay");
 			b10.setMnemonic(KeyEvent.VK_E);
 			b10.setActionCommand("MAHLI_Image_read");
 			

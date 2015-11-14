@@ -1,5 +1,7 @@
 package mahli;
 
+import java.awt.FlowLayout;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -9,6 +11,11 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import callback.CallBack;
 import generic.RoverServerRunnable;
@@ -319,6 +326,16 @@ public class MAHLIServer extends RoverServerRunnable {
 			            	System.out.println(file.toString());
 			            	//outputToAnotherObject.writeObject("Image Read");
 			            	outputToAnotherObject.writeObject("Image Detected "+file.toString()+" and Processed.");
+			            	 BufferedImage img=ImageIO.read(new File(file.toString()));
+			                 ImageIcon icon=new ImageIcon(img);
+			                 JFrame frame=new JFrame();
+			                 frame.setLayout(new FlowLayout());
+			                 frame.setSize(200,300);
+			                 JLabel lbl=new JLabel();
+			                 lbl.setIcon(icon);
+			                 frame.add(lbl);
+			                 frame.setVisible(true);
+			                // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			            	objprocessImage.getImageColor(file);
 			            	file.delete();
 			            	cb.done();
