@@ -143,7 +143,8 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			
 			b17 = new JButton("EXIT");
 			b17.setMnemonic(KeyEvent.VK_E);
-			b17.setActionCommand("EXIT");			
+			b17.setActionCommand("EXIT");
+			b17.setBackground(Color.red);
 
 			// set and listen for button actions
 			b1.addActionListener(this);
