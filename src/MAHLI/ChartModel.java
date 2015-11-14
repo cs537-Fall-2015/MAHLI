@@ -1,19 +1,46 @@
 package MAHLI;
 import java.awt.event.*;
+import java.io.File;
 import java.util.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
+import json.ReadFromJSON;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ChartModel {
-	private double[] data = {200, 40, 50, 100, 40, 10};
-	private String[] dataName = {"BAUXITE", "CORUNDUM", "PYRRHOTITE", "CHLORITE", "DOLOMITE", "SERPENTINE"};
+	private ArrayList<Long> data =  new ArrayList<Long>();
+	private ArrayList<String> dataName = new ArrayList<String>();
+	String imagePath = "";
 	
 	private transient Vector actionListeners;
 	
 	public ChartModel() {
 	}
 	
-	public double[] getData() {
+	public void setData(ArrayList<Long> data) {
+		this.data = data;
+	}
+	
+	public ArrayList<Long> getData() {
 		return data;
+	}
+	
+	public void setDataName(ArrayList<String> dataName) {
+		this.dataName = dataName;
+	}
+	
+	public ArrayList<String> getDataName() {
+		return dataName;
+	}
+	
+	public void setImagePath(String imagePath) {
+		this.imagePath = imagePath;
+	}
+	
+	public String getImagePath() {
+		return imagePath;
 	}
 	
 	public synchronized void removeActionListener(ActionListener l) {
@@ -42,15 +69,11 @@ public class ChartModel {
 		}
 	}
 	
-	public void setChartData(String[] newDataName, double[] newData) {
-		dataName = newDataName;
-		data = newData;
-		// System.arraycopy(newData, 0, data, 0, newData.length);
-		fireActionPerformed(new ActionEvent(this,
-		ActionEvent.ACTION_PERFORMED, null));
-	}
-	
-	public String[] getDataName() {
-		return dataName;
-	}
+	public void setChartData(ArrayList<String> newDataName, ArrayList<Long> newData) {
+	    dataName = newDataName;
+	    data = newData;
+	    // System.arraycopy(newData, 0, data, 0, newData.length);
+	    fireActionPerformed(new ActionEvent(this,
+	      ActionEvent.ACTION_PERFORMED, null));
+	  }
 }

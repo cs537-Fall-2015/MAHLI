@@ -2,6 +2,7 @@ package MAHLI;
 import java.awt.*;
 import javax.swing.JPanel;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class BarChart extends JPanel implements ActionListener {
@@ -9,6 +10,8 @@ public class BarChart extends JPanel implements ActionListener {
 
 	BorderLayout borderLayout1 = new BorderLayout();
 	private ChartModel model;
+	private ArrayList<Long> data =  new ArrayList<Long>();
+	private ArrayList<String> dataName = new ArrayList<String>();
 
 	public BarChart() {
 		this.setLayout(borderLayout1);
@@ -29,30 +32,33 @@ public class BarChart extends JPanel implements ActionListener {
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		ArrayList<String> dn = new ArrayList<String>();
+		ArrayList<Long> d = new ArrayList<Long>();
 
 		if (model == null) return;
 
-		String[] dataName = model.getDataName();
-		double[] data = model.getData();
+		dn = model.getDataName();
+		d = model.getData();
 
 		// Find the maximum value in the data
-		double max = data[0];
-		for (int i=1; i<data.length; i++)
-			max = Math.max(max, data[i]);
+		Long max = Long.valueOf(0);
+		for (int i = 1; i < d.size(); i++){
+			max = Math.max(max, d.get(i));
+		}
 
-		int barWidth = (int)((getWidth() - 10.0) / data.length - 10);
+		int barWidth = (int)((getWidth() - 10.0) / d.size() - 10);
 		int maxBarHeight = getHeight() - 30;
 
 		g.drawLine(5, getHeight() - 10, getWidth() - 5, getHeight() - 10);
 
 		int x = 15;
-		for (int i = 0; i < data.length; i++) {
+		for (int i = 0; i < d.size(); i++) {
 			g.setColor(RandomColor());
-			int newHeight = (int)(maxBarHeight * data[i] / max);
+			int newHeight = (int)(maxBarHeight * d.get(i) / max);
 			int y = getHeight() - 10 - newHeight;
 			g.fillRect(x, y, barWidth, newHeight);
 			g.setColor(Color.black);
-			g.drawString(dataName[i], x, y - 7);
+			g.drawString(dn.get(i), x, y - 7);
 			x += barWidth + 10;
 		}
 	}
