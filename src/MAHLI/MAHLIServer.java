@@ -1,19 +1,18 @@
 package MAHLI;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Random;
 
-import org.json.simple.JSONArray;
-import org.json.simple.parser.JSONParser;
+import javax.swing.JProgressBar;
 
+import org.json.simple.JSONArray;
+
+import MAHLI.junk.MAHLIClient;
 import callback.CallBack;
 import generic.RoverServerRunnable;
 import generic.RoverThreadHandler;
@@ -27,8 +26,8 @@ public class MAHLIServer extends RoverServerRunnable {
 
 	@Override
 	public void run() {
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		ObjectInputStream inputFromAnotherObject;
+		ObjectOutputStream outputToAnotherObject;
 		Boolean camOnStatus = false;
 		Boolean nightIlluminationStatus = false;
 		Boolean autoFocusStatus = false;
@@ -38,12 +37,15 @@ public class MAHLIServer extends RoverServerRunnable {
 		Boolean imageReadStatus = false;
 		Boolean exitStatus = false;
 		Boolean DustCoverStatus = false;
-		Boolean LEDStatus = false;
+		Boolean InfraredStatus = false;
 		File capturedFile = null;
-		File source = new File("images");
-		File destination = new File("src/MAHLI/resources/");
+		File imagesPath = new File("src/MAHLI/resources/images/");
+		File dataPath = new File("src/MAHLI/resources/data/");
 		int port_power = 9013;
 		CallBack cb = new CallBack();
+		ReadFromJSON readJSON = new ReadFromJSON();
+		Random random = new Random();
+		Integer number = 0;
 		
 
 		try {
@@ -55,11 +57,11 @@ public class MAHLIServer extends RoverServerRunnable {
 				getRoverServerSocket().openSocket();
 				
 				// read from socket to ObjectInputStream object
-				ObjectInputStream inputFromAnotherObject = new ObjectInputStream(getRoverServerSocket().getSocket().getInputStream());
+				inputFromAnotherObject = new ObjectInputStream(getRoverServerSocket().getSocket().getInputStream());
 				
 				// convert ObjectInputStream object to String
 				String message = (String) inputFromAnotherObject.readObject();
-				System.out.println("MAHLI Server: Command Received from Client - "+ message);
+				System.out.println("MAHLI Server: Command Received from Client - " + message);
 				if(message.equals("MAHLI_Camera_ON"))
 					command = 1;
 				else if(message.equals("MAHLI_Camera_OFF"))
@@ -68,50 +70,48 @@ public class MAHLIServer extends RoverServerRunnable {
 					command = 3;
 				else if(message.equals("MAHLI_NightIllumination_OFF"))
 					command = 4;
-				else if(message.equals("MAHLI_AutoFocus_ON"))
+				else if(message.equals("MAHLI_Infrared_ON"))
 					command = 5;
-				else if(message.equals("MAHLI_AutoFocus_OFF"))
+				else if(message.equals("MAHLI_Infrared_OFF"))
 					command = 6;
-				else if(message.equals("MAHLI_Video_ON"))
+				else if(message.equals("MAHLI_AutoFocus_ON"))
 					command = 7;
-				else if(message.equals("MAHLI_Video_OFF"))
+				else if(message.equals("MAHLI_AutoFocus_OFF"))
 					command = 8;
-				else if(message.equals("MAHLI_Image_Capture"))
+				else if(message.equals("MAHLI_Video_ON"))
 					command = 9;
-				else if(message.equals("MAHLI_Image_store"))
+				else if(message.equals("MAHLI_Video_OFF"))
 					command = 10;
-				else if(message.equals("MAHLI_Image_read"))
+				else if(message.equals("MAHLI_Dust_Cover_OPEN"))
 					command = 11;
-				else if(message.equals("MAHLI_Analyze_Image_Data"))
+				else if(message.equals("MAHLI_Dust_Cover_CLOSE"))
 					command = 12;
-				else if(message.equals("EXIT"))
+				else if(message.equals("MAHLI_Image_CAPTURE"))
 					command = 13;
-				else if(message.equals("Open_Dust_Cover"))
+				else if(message.equals("MAHLI_Image_READ"))
 					command = 14;
-				else if(message.equals("Close_Dust_Cover"))
+				else if(message.equals("MAHLI_Image_VIEW"))
 					command = 15;
-				else if(message.equals("Open_LED"))
+				else if(message.equals("MAHLI_Image_ANALYZE"))
 					command = 16;
-				else if(message.equals("Close_LED"))
+				else if(message.equals("EXIT"))
 					command = 17;
 				else 
 					command = 18;
 				
 				// create ObjectOutputStream object
-				ObjectOutputStream outputToAnotherObject = new ObjectOutputStream(getRoverServerSocket().getSocket().getOutputStream());
+				outputToAnotherObject = new ObjectOutputStream(getRoverServerSocket().getSocket().getOutputStream());
 				
 				// write object to Socket
 				
 				// getRoverServerSocket().closeSocket();
 				
 		        switch (command) {
-		            case 1:  
+		            case 1: // CAMERA_ON
 		            		if(camOnStatus) {
-		            			//System.out.println("Camera is already On");
 		            			outputToAnotherObject.writeObject("Camera is already On");
 		            		}
 		            		else {
-		            			//System.out.println("Camera turned On");
 		            			camOnStatus = true;
 		            			MAHLIClient clientMahli = new MAHLIClient(port_power, null);
 		            			cb.done();
@@ -120,106 +120,125 @@ public class MAHLIServer extends RoverServerRunnable {
 		            			client_3.start();
 		            		}
 		                    break;
-		            case 2: if(camOnStatus) {
+		            case 2: // CAMERA_OFF
+		            		if(camOnStatus) {
 		            			camOnStatus = false;
-		            			//System.out.println("Camera turned off");
 		            			outputToAnotherObject.writeObject("Camera turned off");
 		            			cb.done();
 		            		}
 		            		else {
-		            			//System.out.println("Camera is already turned off");
 		            			outputToAnotherObject.writeObject("Camera is already turned off");
 		            		}
 		                    break;
-		            case 3: if(camOnStatus) {
+		            case 3: // NIGHTILLUMINATION_ON
+		            		if(camOnStatus) {
 		            			if(nightIlluminationStatus) {
-		            				//System.out.println("Night Illumination is already tuned on");
 		            				outputToAnotherObject.writeObject("Night Illumination is already tuned on");
 		            			}
 		            			else {
 		            				nightIlluminationStatus = true;
-		            				//System.out.println("Night Illumination turned On");
 		            				outputToAnotherObject.writeObject("Night Illumination turned On");
 		            				cb.done();
 		            			}
 		            		}
 		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 		                    break;
-		            case 4: if(camOnStatus) {
+		            case 4: // NIGHTILLUMINATION_OFF
+		            		if(camOnStatus) {
 		            			if(nightIlluminationStatus) {
 		            				nightIlluminationStatus = false;
-		            				// System.out.println("Night Illumination is turned off");
 		            			    outputToAnotherObject.writeObject("Night Illumination is turned off");
 		            			    cb.done();
 		            			}
 		            			else {
-		            				// System.out.println("Night Illumination already turned off");
 		            				outputToAnotherObject.writeObject("Night Illumination already turned off");
 		            			}
 	            			}
 		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 		                    break;
-		            case 5: if(camOnStatus) {
+		            case 5: // INFRARED_ON
+			            	if(camOnStatus) {
+		            			if(InfraredStatus) {
+			            			outputToAnotherObject.writeObject("Infrared is already turned on");
+			            		}
+			            		else {
+			            			InfraredStatus = true;
+			            			outputToAnotherObject.writeObject("Infrared turned on ");
+			            			cb.done();
+			            			}
+			        		}
+		        			else {
+			        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+		        			}
+	                     	break;
+		            case 6: // INFRARED_OFF
+			            	if(camOnStatus) {
+				        		if(InfraredStatus) {
+				        			InfraredStatus = false;
+				        			outputToAnotherObject.writeObject("Infrared turned off");
+				        			cb.done();
+				        		}
+				        		else {
+				        			outputToAnotherObject.writeObject("Infrared is already turned off");
+				        		}
+			            	}
+		        			else {
+			        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+		        			}
+			                break;
+		            case 7: // AUTOFOCUS_ON
+		            		if(camOnStatus) {
 		            			if(autoFocusStatus){
-		            				// System.out.println("Auto Focus is already turned ON");
 		            				outputToAnotherObject.writeObject("Auto Focus is already turned ON");
 		            			}
 		            			else {
-		            				// System.out.println("Auto Focus is now turned ON");
 		            				outputToAnotherObject.writeObject("Auto Focus is now turned ON");
 		            				cb.done();
 		            				autoFocusStatus = true;
 		            			}
 		            		}
 		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 		                     break;
-		            case 6: if(camOnStatus) {
+		            case 8: // AUTOFOCUS_OFF
+		            		if(camOnStatus) {
 		            			if(autoFocusStatus){
 		            				autoFocusStatus = false;
-		            				// System.out.println("Auto Focus is now turned OFF");
 		            				outputToAnotherObject.writeObject("Auto Focus is now turned OFF");
 		            				cb.done();
 		            			}
 		            			else {
-		            				// System.out.println("Auto Focus is already turned OFF");
 		            				outputToAnotherObject.writeObject("Auto Focus is already turned OFF");
 		            			}
 		            		}
 		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            		    outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 			                break;
-		            case 7:  if(camOnStatus) {
+		            case 9: // VIDEO_ON
+		            		if(camOnStatus) {
 		            			if(videoStatus){
-		            				// System.out.println("Video is already turned ON");
 		            				outputToAnotherObject.writeObject("Video is already turned ON");
 		            			}
 		            			else {
-		            				// System.out.println("Video is now turned ON");
 		            				outputToAnotherObject.writeObject("Video is now turned ON");
 		            				cb.done();
 		            				videoStatus = true;
 		            			}	
 		            		}
 		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 				           	break;
-		            case 8: if(camOnStatus) {
+		            case 10: // VIDEO_OFF
+		            		if(camOnStatus) {
 		            			if(videoStatus){
 		            				videoStatus = false;
-		            				// System.out.println("Video is now turned OFF");
 		            				outputToAnotherObject.writeObject("Video is now turned OFF");
 		            				cb.done();
 		            			}
@@ -229,81 +248,125 @@ public class MAHLIServer extends RoverServerRunnable {
 		            			}
 							}
 							else {
-								// System.out.println("Please turn on the camera to proceed");
 								outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 							}
 							break;
-		            case 9: if( camOnStatus ) {
+		            case 11: // DUST_COVERS_OPEN
+		            		if(camOnStatus) {
+		            			if(DustCoverStatus){
+		            				outputToAnotherObject.writeObject("Dust Cover  is already turned OPEN");
+		            			}
+		            			else {
+		            				outputToAnotherObject.writeObject("Dust Cover is now OPEN");
+		            				cb.done();
+		            				DustCoverStatus = true;
+		            			}	
+		            		}
+		            		else {
+		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+		            		}
+		                    break;
+		            case 12: // DUST_COVERS_CLOSE
+		            		if(camOnStatus) {
+				        		if(DustCoverStatus) {
+				        			DustCoverStatus = false;
+				        			outputToAnotherObject.writeObject("Dust Cover is close");
+				        			cb.done();
+				        		}
+				        		else {
+				        			outputToAnotherObject.writeObject("Dust Cover is already Close");
+				        		}
+					        }
+			        		else {
+			        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
+			        		}
+		                 	break;
+		            case 13: // IMAGE_CAPTURE
+		            		if( camOnStatus ) {
 		        				if(DustCoverStatus == true) {
 					            	imageCaptureStatus = true;
 					            	// System.out.println("Image Captured");
-					            	Random rand = new Random();
-					            	int index = rand.nextInt(source.list().length-1) + 1;
-					        		capturedFile = new File(source.list()[index]);
-					        		System.out.println(capturedFile);
-					            	outputToAnotherObject.writeObject("Image Captured - "+capturedFile.toString());
+					            	random = new Random();
+					            	number = random.nextInt(10) + 1;
+					        		capturedFile = new File(imagesPath.list()[number]);
+					        		System.out.println("MAHLI Server: image captured - " + capturedFile);
+					            	outputToAnotherObject.writeObject("Image Captured: " + capturedFile.toString());
 					            	cb.done();
 		        				}
 		        				else {
-		                			// System.out.println("Please turn on the camera to proceed");
 		                			outputToAnotherObject.writeObject("Open Dust Cover");
 		                		}
 		            		}
 		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 				            break;
-		            case 10: if(camOnStatus) {
-				            	imageStoreStatus = true;
-				            	// System.out.println("Image Stored");
+		            case 14: // IMAGE_READ
+		            		if(camOnStatus) {
 				            	if(capturedFile != null) {
-				            		System.out.println(capturedFile);
-				            		Files.copy(new File(source.toString()+"/"+capturedFile.toString()).toPath(), 
-				            				new File(destination.toString()+"/"+ capturedFile.toString()).toPath(), 
-				            				StandardCopyOption.REPLACE_EXISTING);
-				            		outputToAnotherObject.writeObject("Image Stored - "+capturedFile.toString());
-				            		capturedFile = null;
+				            		File file = new File(dataPath + "/data" + number + ".json");
+				            		readJSON.setJSONArray(file);
+				            		outputToAnotherObject.writeObject("Reading image data");
+				            		readJSON.printJSONArray();
 				            		cb.done();
 				            	}
 				            	else
 				            		outputToAnotherObject.writeObject("No image captured");
 							}
 							else {
-								// System.out.println("Please turn on the camera to proceed");
 								outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 							}
 							break;
-		            case 11: if(camOnStatus) {
-				            	if(destination.list().length>0){
-					            	File file = new File(destination.toString()+"/"+destination.list()[0]);
-					    		    ProcessImage objprocessImage=new ProcessImage();
-					            	imageReadStatus = true;
-					            	System.out.println(file.toString());
-					            	//outputToAnotherObject.writeObject("Image Read");
-					            	outputToAnotherObject.writeObject("Image Detected "+file.toString()+" and Processed.");
-					            	objprocessImage.getImageColor(file);
-					            	file.delete();
+		            case 15: // IMAGE_VIEW
+		            		if(camOnStatus) {
+				            	if(imagesPath.listFiles().length > 0){
+					            	
 					            	cb.done();
 					            }
 				            	else
 				            		outputToAnotherObject.writeObject("Image needs to be Captured First");
 		            		}
 				            else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 		                    break;
-		            case 12: if(camOnStatus) {
-				            	if(destination.list().length>0){
+		            case 16: // IMAGE_ANALYZE
+		            		if(camOnStatus) {
+				            	if(dataPath.listFiles().length > 0){
 					            	//File file = new File(destination.toString()+"/"+destination.list()[0]);
-					            	File file = new File(destination.toString()+"/data.json");
+					            	File file = new File(dataPath + "/data" + number + ".json");
 					            	System.out.println(file.toString());
-					            	outputToAnotherObject.writeObject("Image data: "+file.getName()+" is analyzing.");
-					    			
-					            	ReadFromJSON readJSON = new ReadFromJSON();
-					            	readJSON.printJSONArray(file);
+					            	outputToAnotherObject.writeObject("Image data: " + file.getName() + " is analyzing.");
+					            	
+					            	progress(10);
+					            	outputToAnotherObject.writeObject("Completed");
+					            	readJSON.setJSONArray(file);
+					            	/*JSONArray json = readJSON.getJSONArray();
+					            	System.out.println(readJSON.getJSONArray().size() + " - " + json.size());
+					            	JSONArray j = readJSON.getJSONArray();
+					            	System.out.println(readJSON.getJSONArray().size() + " - " + j.size());*/
+					            	ChartModel model = new ChartModel();
+					            	model.setDataName(readJSON.getDataName());
+					            	model.setData(readJSON.getData());
+					            	/*System.out.println(model.getDataName().size() + " - " + model.getData().size());
+					            	System.out.println(model.getData());
+					            	System.out.println(model.getDataName());
+					            	System.out.println(readJSON.getDataName().size() + " - " + readJSON.getData().size());
+					            	BarChart bar = new BarChart();
+					            	bar.setDataName(readJSON.getDataName());
+					            	bar.setData(readJSON.getData());
+					            	PieChart pie = new PieChart();
+					            	pie.setDataName(readJSON.getDataName());
+					            	pie.setData(readJSON.getData());
+					            	System.out.println(pie.getData());
+					            	System.out.println(pie.getDataName());
+					            	System.out.println(bar.getData());
+					            	System.out.println(bar.getDataName());*/
 					            	MAHLIDisplayCharts displayCharts = new MAHLIDisplayCharts();
+					            	model.setImagePath(capturedFile.getCanonicalPath());
+					            	/*System.out.println(capturedFile);
+					            	System.out.println(capturedFile.toString());
+					            	System.out.println(capturedFile.getCanonicalPath());*/
 					            	displayCharts.displayApplet(); // FIX DEFAULT CLOSE BUTTON
 					            	cb.done();
 					            }
@@ -311,109 +374,73 @@ public class MAHLIServer extends RoverServerRunnable {
 				            		outputToAnotherObject.writeObject("Image needs to be Captured First");
 		            		}
 				            else {
-		            			// System.out.println("Please turn on the camera to proceed");
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 		                    break;
-		            case 13: exitStatus = true;
+		            case 17: // EXIT
+			            	exitStatus = true;
 		            		outputToAnotherObject.writeObject("Exit");
 		            		cb.done();
 		                    break;
-		            case 14:  if(camOnStatus) {
-		            			if(DustCoverStatus){
-		            				// System.out.println("Video is already turned ON");
-		            				outputToAnotherObject.writeObject("Dust Cover  is already turned OPEN");
-		            			}
-		            			else {
-		            				// System.out.println("Video is now turned ON");
-		            				outputToAnotherObject.writeObject("Dust Cover is now OPEN");
-		            				cb.done();
-		            				DustCoverStatus = true;
-		            			}	
-		            		}
-		            		else {
-		            			// System.out.println("Please turn on the camera to proceed");
-		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
-		            		}
-		                    break;
-                    
-		            case 15: if(camOnStatus) {
-				        		if(DustCoverStatus) {
-				        			DustCoverStatus = false;
-				        			//System.out.println("Camera turned off");
-				        			outputToAnotherObject.writeObject("Dust Cover is close");
-				        			cb.done();
-				        		}
-				        		else {
-				        			//System.out.println("Camera is already turned off");
-				        			outputToAnotherObject.writeObject("Dust Cover is already Close");
-				        		}
-					        }
-			        		else {
-			        			// System.out.println("Please turn on the camera to proceed");
-			        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
-			        		}
-		                 	break;
-		            case 16: if(camOnStatus) {
-		            			if(LEDStatus) {
-			            			//System.out.println("Camera is already On");
-			            			outputToAnotherObject.writeObject("LED is already turned on");
-			            		}
-			            		else {
-			            			//System.out.println("Camera turned On");
-			            			LEDStatus = true;
-			            			MAHLIClient clientMahli = new MAHLIClient(port_power, null);
-			            			cb.done();
-			            			Thread client_3 = RoverThreadHandler.getRoverThreadHandler().getNewThread(clientMahli);
-			            			outputToAnotherObject.writeObject("LED turned on ");
-			            			client_3.start();
-			            			}
-			        		}
-		        			else {
-			        			// System.out.println("Please turn on the camera to proceed");
-			        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
-		        			}
-	                     	break;
-		            case 17: if(camOnStatus) {
-				        		if(LEDStatus) {
-				        			LEDStatus = false;
-				        			//System.out.println("Camera turned off");
-				        			outputToAnotherObject.writeObject("LED turned off");
-				        			cb.done();
-				        		}
-				        		else {
-				        			//System.out.println("Camera is already turned off");
-				        			outputToAnotherObject.writeObject("LED is already turned off");
-				        		}
-			            	}
-		        			else {
-			        			// System.out.println("Please turn on the camera to proceed");
-			        			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
-		        			}
-			                break;
 		            case 18: 
 		            		outputToAnotherObject.writeObject("Invalid Command");
                     		break;
 		            default: 
 		            		outputToAnotherObject.writeObject("Exit");
+		            		System.out.println("SERVER: Shutting down Socket server MAHLI!!");
 		            		cb.done();
 		                    break;
 		        }
 		        
 		        // terminate the server if client sends exit request
-				if (message.equalsIgnoreCase("exit"))
+				if (exitStatus){
+					System.out.println("SERVER: Performing System Shutdown");
+					if(camOnStatus){
+						System.out.println("Turning the Camera off ...");
+					}
+					if(nightIlluminationStatus){
+						System.out.println("Turning the NightIllumination off ...");
+					}
+					if(autoFocusStatus){
+						System.out.println("Turning the Autofocus off ...");
+						progress(10);
+					}
+					if(videoStatus){
+						System.out.println("Turning the Video off ...");
+					}
+					if(DustCoverStatus){
+						System.out.println("Closing the Dust Covers ...");
+						progress(50);
+					}
+					if(InfraredStatus){
+						System.out.println("Turning the Infrared off ...");
+					}
+					System.out.println("SERVER: System Shutdown Complete");
 					break;
+				}
 		        
 				// close resources
 				inputFromAnotherObject.close();
 				outputToAnotherObject.close();
 			}
-			System.out.println("Server: Shutting down Socket server MAHLI!!");
+			
 			// close the ServerSocket object
 			closeAll();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void progress(int n) throws InterruptedException {
+        int x = 0;
+        while(x <= n) {
+        	System.out.print("#");
+        	Thread.sleep(100);
+            x++; // Setting incremental values
+            if (x == n){
+            	System.out.println(" Completed"); // End message
+            }
+        }
+	}
 }
+
