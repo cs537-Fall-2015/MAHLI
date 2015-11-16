@@ -1,6 +1,9 @@
 package mahli;
 
+import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,11 +19,15 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import callback.CallBack;
 import generic.RoverServerRunnable;
 import generic.RoverThreadHandler;
-
+import mahli.ZoomLabel;
 public class MAHLIServer extends RoverServerRunnable {
 
 	public MAHLIServer(int port) throws IOException {
@@ -324,21 +331,41 @@ public class MAHLIServer extends RoverServerRunnable {
 			    		    ProcessImage objprocessImage=new ProcessImage();
 			            	imageReadStatus = true;
 			            	System.out.println(file.toString());
+			            	
+			           
+			            	final ZoomLabel label = new ZoomLabel();
+			                try{
+			                    Image img = javax.imageio.ImageIO.read(new File(file.toString()));
+			                    label.setImage(img);
+			                }catch(Exception e) {
+			                    System.err.println("Couldn't load image for demonstration");
+			                    e.printStackTrace();
+			                    System.exit(0);
+			                }
+
+			                JFrame frame = new JFrame();
+
+			                frame.add(new JScrollPane(label));
+
+			                JSlider slider = new JSlider(0,1000,100);
+			                slider.setPaintLabels(true);
+			                slider.addChangeListener(new ChangeListener() {
+			                    public void stateChanged(ChangeEvent e) {
+			                        int val = ((JSlider) e.getSource()).getValue();
+			                        label.setScale(val * .01f, val * .01f);
+			                    }
+			                });
+
+			                frame.add(slider, java.awt.BorderLayout.SOUTH);
+			                frame.setSize(400,400);
+			                frame.setLocationRelativeTo(null);
+			                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			                frame.setVisible(true);         
 			            	//outputToAnotherObject.writeObject("Image Read");
-			            	outputToAnotherObject.writeObject("Image Detected "+file.toString()+" and Processed.");
-			            	 BufferedImage img=ImageIO.read(new File(file.toString()));
-			                 ImageIcon icon=new ImageIcon(img);
-			                 JFrame frame=new JFrame();
-			                 frame.setLayout(new FlowLayout());
-			                 frame.setSize(200,300);
-			                 JLabel lbl=new JLabel();
-			                 lbl.setIcon(icon);
-			                 frame.add(lbl);
-			                 frame.setVisible(true);
-			                // frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-			            	objprocessImage.getImageColor(file);
-			            	file.delete();
+			            	outputToAnotherObject.writeObject("Image Detected "+file.toString()+" and Processed.");			            
 			            	cb.done();
+   	
+			            	
 			            }
 		            	else
 		            		outputToAnotherObject.writeObject("Image needs to be Captured First");
@@ -365,6 +392,7 @@ public class MAHLIServer extends RoverServerRunnable {
             			{
             				// System.out.println("Video is now turned ON");
             				outputToAnotherObject.writeObject("Dust Cover is now OPEN");
+            				 //new Test();
             				cb.done();
             				DustCoverStatus = true;
             			}	
