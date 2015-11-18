@@ -68,9 +68,9 @@ public class MAHLIDummyClient extends RoverClientRunnable{
 		    outputToAnotherObject.writeObject("COLOR OF IMAGE IS "+objprocessImage.getImageColor(file));
 		    inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
             String message = (String) inputFromAnotherObject.readObject();
-            System.out.println("Module 1 Client: Message from Server - " + message.toUpperCase());*/
+            System.out.println("Module 1 Client: Message from  - " + message.toUpperCase());*/
             
-            //close resources
+            
             inputFromAnotherObject.close();
             outputToAnotherObject.close();
             Thread.sleep(5000);

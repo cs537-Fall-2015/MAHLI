@@ -1,6 +1,5 @@
 package MAHLI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -14,9 +13,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import javax.swing.AbstractButton;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -27,8 +23,7 @@ import generic.RoverClientRunnable;
 
 public class MAHLIGuiApp extends RoverClientRunnable {
 
-	public MAHLIGuiApp(int port, InetAddress host)
-			throws UnknownHostException {
+	public MAHLIGuiApp(int port, InetAddress host) throws UnknownHostException {
 		super(port, host);
 	}
 
@@ -37,7 +32,7 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 		GUILayout gl = new GUILayout();
 		gl.mainRun();
 	}
-	
+
 	/**
 	 * Create the GUI buttons, text area and layout parameters
 	 */
@@ -45,6 +40,7 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 		private static final long serialVersionUID = 1L;
 		
 		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14 , b15, b16, b17;
+
 		protected JTextArea ta, sta;
 		protected JScrollPane sp, ssp;
 
@@ -65,7 +61,7 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			JPanel outputPanel = new JPanel();
 			JPanel clientPanel = new JPanel();
 			JPanel serverPanel = new JPanel();
-	        
+
 			// set the preferred panel size
 	        buttonPanel.setPreferredSize(leftDimension);
 	        outputPanel.setPreferredSize(rightDimension);
@@ -83,12 +79,12 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 	        outputPanel.setVisible(true);
 	        clientPanel.setVisible(true);
 	        serverPanel.setVisible(true);
-	        
-	        // set the buttons parameters
+
+			// set the buttons parameters
 			b1 = new JButton("MAHLI_Camera_ON");
 			b1.setMnemonic(KeyEvent.VK_E);
 			b1.setActionCommand("MAHLI_Camera_ON");
-			
+
 			b2 = new JButton("MAHLI_Camera_OFF");
 			b2.setMnemonic(KeyEvent.VK_E);
 			b2.setActionCommand("MAHLI_Camera_OFF");
@@ -100,11 +96,11 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b4 = new JButton("MAHLI_NightIllumination_OFF");
 			b4.setMnemonic(KeyEvent.VK_E);
 			b4.setActionCommand("MAHLI_NightIllumination_OFF");
-			
+
 			b5 = new JButton("MAHLI_Infrared_ON");
 			b5.setMnemonic(KeyEvent.VK_E);
 			b5.setActionCommand("MAHLI_Infrared_ON");
-			
+
 			b6 = new JButton("MAHLI_Infrared_OFF");
 			b6.setMnemonic(KeyEvent.VK_E);
 			b6.setActionCommand("MAHLI_Infrared_OFF");
@@ -124,11 +120,11 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b10 = new JButton("MAHLI_Video_OFF");
 			b10.setMnemonic(KeyEvent.VK_E);
 			b10.setActionCommand("MAHLI_Video_OFF");
-			
+
 			b11 = new JButton("MAHLI_Dust_Cover_OPEN");
 			b11.setMnemonic(KeyEvent.VK_E);
 			b11.setActionCommand("MAHLI_Dust_Cover_OPEN");
-			
+
 			b12 = new JButton("MAHLI_Dust_Cover_CLOSE");
 			b12.setMnemonic(KeyEvent.VK_E);
 			b12.setActionCommand("MAHLI_Dust_Cover_CLOSE");
@@ -144,14 +140,16 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b15 = new JButton("MAHLI_Image_VIEW");
 			b15.setMnemonic(KeyEvent.VK_E);
 			b15.setActionCommand("MAHLI_Image_VIEW");
-			
+
 			b16 = new JButton("MAHLI_Image_ANALYZE");
 			b16.setMnemonic(KeyEvent.VK_E);
 			b16.setActionCommand("MAHLI_Image_ANALYZE");
-			
+
 			b17 = new JButton("EXIT");
 			b17.setMnemonic(KeyEvent.VK_E);
-			b17.setActionCommand("EXIT");			
+			b17.setActionCommand("EXIT");
+			b17.setBackground(Color.red);
+
 
 			// set and listen for button actions
 			b1.addActionListener(this);
@@ -171,18 +169,18 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b15.addActionListener(this);
 			b16.addActionListener(this);
 			b17.addActionListener(this);
-			
+
 			// set the text area parameters
 			ta = new JTextArea(50, 100);
-	    	ta.setLineWrap(true);
-	        ta.setWrapStyleWord(true);
-	        sp = new JScrollPane(ta);
-	        
-	        // set the text area parameters
- 			sta = new JTextArea(50, 100);
- 	    	sta.setLineWrap(true);
- 	        sta.setWrapStyleWord(true);
- 	        ssp = new JScrollPane(sta);
+			ta.setLineWrap(true);
+			ta.setWrapStyleWord(true);
+			sp = new JScrollPane(ta);
+
+			// set the text area parameters for the server output
+			sta = new JTextArea(50, 100);
+			sta.setLineWrap(true);
+			sta.setWrapStyleWord(true);
+			ssp = new JScrollPane(sta);
 
 			// add all the buttons to the left panel
 	        buttonPanel.add(b1);
@@ -217,21 +215,23 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 		public void actionPerformed(ActionEvent e) {
 			ObjectOutputStream outputToAnotherObject = null;
 			ObjectInputStream inputFromAnotherObject = null;
-			
+			// ObjectInputStream inputFromAnotherServerObject = null;
+
 			String command;
 			String reply = "";
 			command = e.getActionCommand();
-			
+
 			try {
 				outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
 				outputToAnotherObject.writeObject(command);
 				inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
+				// inputFromAnotherServerObject = new
+				// ObjectInputStream(getRoverSocket().getSocket().getInputStream());
 				reply = String.valueOf(inputFromAnotherObject.readObject());
 				ta.append("MAHLI SERVER: " + reply);
 				ta.append("\n");
 				sta.append("MAHLI: " + command);
 				sta.append("\n");
-				
 				
 				if(reply.equalsIgnoreCase("exit")){
 					Thread.sleep(10000);
@@ -246,6 +246,7 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 		 * Create the GUI and show it. For thread safety, this method should be
 		 * invoked from the event-dispatching thread.
 		 */
+		@SuppressWarnings("static-access")
 		private void createAndShowGUI() {
 
 			// Create and set up the window.
