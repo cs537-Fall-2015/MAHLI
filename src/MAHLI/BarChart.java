@@ -10,8 +10,6 @@ public class BarChart extends JPanel implements ActionListener {
 
 	BorderLayout borderLayout1 = new BorderLayout();
 	private ChartModel model;
-	private ArrayList<Long> data =  new ArrayList<Long>();
-	private ArrayList<String> dataName = new ArrayList<String>();
 
 	public BarChart() {
 		this.setLayout(borderLayout1);
@@ -37,8 +35,8 @@ public class BarChart extends JPanel implements ActionListener {
 
 		if (model == null) return;
 
-		dn = model.getDataName();
-		d = model.getData();
+		dn.addAll(model.getDataName());
+		d.addAll(model.getData());
 
 		// Find the maximum value in the data
 		Long max = Long.valueOf(0);

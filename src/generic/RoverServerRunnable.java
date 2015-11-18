@@ -2,7 +2,7 @@ package generic;
 
 import java.io.IOException;
 
-public abstract class RoverServerRunnable implements Runnable{
+public abstract class RoverServerRunnable implements Runnable {
 	
 	private RoverServerSocket roverServerSocket;
 	

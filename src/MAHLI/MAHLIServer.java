@@ -4,13 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.Random;
-
-import javax.swing.JProgressBar;
-
-import org.json.simple.JSONArray;
 
 import MAHLI.junk.MAHLIClient;
 import callback.CallBack;
@@ -39,6 +33,7 @@ public class MAHLIServer extends RoverServerRunnable {
 		Boolean DustCoverStatus = false;
 		Boolean InfraredStatus = false;
 		File capturedFile = null;
+		File dataFile = null;
 		File imagesPath = new File("src/MAHLI/resources/images/");
 		File dataPath = new File("src/MAHLI/resources/data/");
 		int port_power = 9013;
@@ -285,10 +280,10 @@ public class MAHLIServer extends RoverServerRunnable {
 		            		if( camOnStatus ) {
 		        				if(DustCoverStatus == true) {
 					            	imageCaptureStatus = true;
-					            	// System.out.println("Image Captured");
 					            	random = new Random();
 					            	number = random.nextInt(10) + 1;
-					        		capturedFile = new File(imagesPath.list()[number]);
+					        		capturedFile = new File(imagesPath + "/" + number + ".jpg");
+					        		dataFile = new File(dataPath + "/data" + number + ".json");
 					        		System.out.println("MAHLI Server: image captured - " + capturedFile);
 					            	outputToAnotherObject.writeObject("Image Captured: " + capturedFile.toString());
 					            	cb.done();
@@ -304,8 +299,7 @@ public class MAHLIServer extends RoverServerRunnable {
 		            case 14: // IMAGE_READ
 		            		if(camOnStatus) {
 				            	if(capturedFile != null) {
-				            		File file = new File(dataPath + "/data" + number + ".json");
-				            		readJSON.setJSONArray(file);
+				            		readJSON.setJSONArray(dataFile);
 				            		outputToAnotherObject.writeObject("Reading image data");
 				            		readJSON.printJSONArray();
 				            		cb.done();
@@ -332,42 +326,21 @@ public class MAHLIServer extends RoverServerRunnable {
 		                    break;
 		            case 16: // IMAGE_ANALYZE
 		            		if(camOnStatus) {
-				            	if(dataPath.listFiles().length > 0){
-					            	//File file = new File(destination.toString()+"/"+destination.list()[0]);
-					            	File file = new File(dataPath + "/data" + number + ".json");
-					            	System.out.println(file.toString());
-					            	outputToAnotherObject.writeObject("Image data: " + file.getName() + " is analyzing.");
+				            	if(dataFile.exists()){
+					            	//File file = new File(dataPath + "/data" + number + ".json");
+					            	System.out.println(dataFile.toString());
+					            	outputToAnotherObject.writeObject("Image data: " + dataFile.getName() + " is analyzing.");
 					            	
 					            	progress(10);
 					            	outputToAnotherObject.writeObject("Completed");
-					            	readJSON.setJSONArray(file);
-					            	/*JSONArray json = readJSON.getJSONArray();
-					            	System.out.println(readJSON.getJSONArray().size() + " - " + json.size());
-					            	JSONArray j = readJSON.getJSONArray();
-					            	System.out.println(readJSON.getJSONArray().size() + " - " + j.size());*/
+					            	readJSON.setJSONArray(dataFile);
 					            	ChartModel model = new ChartModel();
 					            	model.setDataName(readJSON.getDataName());
 					            	model.setData(readJSON.getData());
-					            	/*System.out.println(model.getDataName().size() + " - " + model.getData().size());
-					            	System.out.println(model.getData());
-					            	System.out.println(model.getDataName());
-					            	System.out.println(readJSON.getDataName().size() + " - " + readJSON.getData().size());
-					            	BarChart bar = new BarChart();
-					            	bar.setDataName(readJSON.getDataName());
-					            	bar.setData(readJSON.getData());
-					            	PieChart pie = new PieChart();
-					            	pie.setDataName(readJSON.getDataName());
-					            	pie.setData(readJSON.getData());
-					            	System.out.println(pie.getData());
-					            	System.out.println(pie.getDataName());
-					            	System.out.println(bar.getData());
-					            	System.out.println(bar.getDataName());*/
 					            	MAHLIDisplayCharts displayCharts = new MAHLIDisplayCharts();
-					            	model.setImagePath(capturedFile.getCanonicalPath());
-					            	/*System.out.println(capturedFile);
-					            	System.out.println(capturedFile.toString());
-					            	System.out.println(capturedFile.getCanonicalPath());*/
-					            	displayCharts.displayApplet(); // FIX DEFAULT CLOSE BUTTON
+					            	displayCharts.setChartModel(model);
+					            	displayCharts.setImageFile(dataFile);
+					            	displayCharts.displayApplet(displayCharts);
 					            	cb.done();
 					            }
 				            	else

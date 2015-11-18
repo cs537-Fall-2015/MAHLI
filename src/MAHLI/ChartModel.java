@@ -1,18 +1,11 @@
 package MAHLI;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import json.ReadFromJSON;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ChartModel {
 	private ArrayList<Long> data =  new ArrayList<Long>();
 	private ArrayList<String> dataName = new ArrayList<String>();
-	String imagePath = "";
 	
 	private transient Vector actionListeners;
 	
@@ -33,14 +26,6 @@ public class ChartModel {
 	
 	public ArrayList<String> getDataName() {
 		return dataName;
-	}
-	
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-	
-	public String getImagePath() {
-		return imagePath;
 	}
 	
 	public synchronized void removeActionListener(ActionListener l) {
