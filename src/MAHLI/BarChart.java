@@ -10,6 +10,7 @@ public class BarChart extends JPanel implements ActionListener {
 
 	BorderLayout borderLayout1 = new BorderLayout();
 	private ChartModel model;
+	Integer number = 0;
 
 	public BarChart() {
 		this.setLayout(borderLayout1);

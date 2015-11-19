@@ -6,7 +6,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
-import MAHLI.junk.MAHLIClient;
 import callback.CallBack;
 import generic.RoverServerRunnable;
 import generic.RoverThreadHandler;
@@ -301,7 +300,7 @@ public class MAHLIServer extends RoverServerRunnable {
 				            	if(capturedFile != null) {
 				            		readJSON.setJSONArray(dataFile);
 				            		outputToAnotherObject.writeObject("Reading image data");
-				            		readJSON.printJSONArray();
+				            		outputToAnotherObject.writeObject(readJSON.getJSONArray());
 				            		cb.done();
 				            	}
 				            	else
@@ -327,19 +326,16 @@ public class MAHLIServer extends RoverServerRunnable {
 		            case 16: // IMAGE_ANALYZE
 		            		if(camOnStatus) {
 				            	if(dataFile.exists()){
-					            	//File file = new File(dataPath + "/data" + number + ".json");
 					            	System.out.println(dataFile.toString());
 					            	outputToAnotherObject.writeObject("Image data: " + dataFile.getName() + " is analyzing.");
 					            	
 					            	progress(10);
 					            	outputToAnotherObject.writeObject("Completed");
 					            	readJSON.setJSONArray(dataFile);
-					            	ChartModel model = new ChartModel();
-					            	model.setDataName(readJSON.getDataName());
-					            	model.setData(readJSON.getData());
+					            	ChartModel chart = new ChartModel();
+					            	chart.setNumber(number);
 					            	MAHLIDisplayCharts displayCharts = new MAHLIDisplayCharts();
-					            	displayCharts.setChartModel(model);
-					            	displayCharts.setImageFile(dataFile);
+					            	displayCharts.setNumber(number);
 					            	displayCharts.displayApplet(displayCharts);
 					            	cb.done();
 					            }

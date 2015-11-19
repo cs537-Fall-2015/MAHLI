@@ -6,26 +6,19 @@ import java.util.*;
 public class ChartModel {
 	private ArrayList<Long> data =  new ArrayList<Long>();
 	private ArrayList<String> dataName = new ArrayList<String>();
+	Integer number = 0;
 	
 	private transient Vector actionListeners;
 	
 	public ChartModel() {
 	}
 	
-	public void setData(ArrayList<Long> data) {
-		this.data = data;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 	
-	public ArrayList<Long> getData() {
-		return data;
-	}
-	
-	public void setDataName(ArrayList<String> dataName) {
-		this.dataName = dataName;
-	}
-	
-	public ArrayList<String> getDataName() {
-		return dataName;
+	public Integer getNumber() {
+		return number;
 	}
 	
 	public synchronized void removeActionListener(ActionListener l) {
@@ -60,5 +53,21 @@ public class ChartModel {
 	    // System.arraycopy(newData, 0, data, 0, newData.length);
 	    fireActionPerformed(new ActionEvent(this,
 	      ActionEvent.ACTION_PERFORMED, null));
-	  }
+	}
+	
+	public ArrayList<Long> getData() {
+		return data;
+	}
+
+	public void setData(ArrayList<Long> data) {
+		this.data = data;
+	}
+
+	public ArrayList<String> getDataName() {
+		return dataName;
+	}
+
+	public void setDataName(ArrayList<String> dataName) {
+		this.dataName = dataName;
+	}
 }

@@ -1,4 +1,4 @@
-package module1;
+package MAHLI;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,8 +17,7 @@ public class ModuleOneServer extends RoverServerRunnable {
 
 		try {
 			while (true) {
-				
-				System.out.println("Module 1 Server: Waiting for client request");
+				System.out.println("Module One Server: Waiting for client request");
 				
 				// creating socket and waiting for client connection
 				getRoverServerSocket().openSocket();
@@ -28,19 +27,12 @@ public class ModuleOneServer extends RoverServerRunnable {
 				
 				// convert ObjectInputStream object to String
 				String message = (String) inputFromAnotherObject.readObject();
-				System.out.println("Module 1 Server: Message Received from Client - "+ message.toUpperCase());
-				
-				// create ObjectOutputStream object
-				//ObjectOutputStream outputToAnotherObject = new ObjectOutputStream(getRoverServerSocket().getSocket().getOutputStream());
-				
-				// write object to Socket
-				//outputToAnotherObject.writeObject("Module 1 Server response Hi Client - " + message);
-				
+				System.out.println("Module One Server: Message Received from Client - "+ message.toUpperCase());
+								
 				// close resources
 				inputFromAnotherObject.close();
 				//outputToAnotherObject.close();
 				
-				// getRoverServerSocket().closeSocket();
 				// terminate the server if client sends exit request
 				if (message.equalsIgnoreCase("exit"))
 					break;

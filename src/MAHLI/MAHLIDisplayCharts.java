@@ -3,7 +3,6 @@ package MAHLI;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,8 +14,7 @@ public class MAHLIDisplayCharts extends javax.swing.JApplet {
 
 	PieChart pieChart = new PieChart();
 	BarChart barChart = new BarChart();
-	ChartModel chartModel = null;
-	File imageFile = null;
+	ChartModel chartModel = new ChartModel();
 	
 	public void setChartModel(ChartModel chartModel){
 		this.chartModel = chartModel;
@@ -32,14 +30,15 @@ public class MAHLIDisplayCharts extends javax.swing.JApplet {
 		initComponents();
 		pieChart.setModel(chartModel);
 		barChart.setModel(chartModel);
+		chartModel.setNumber(getNumber());
 	}
 	
-	public void setImageFile(File image){
-		this.imageFile = image;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 	
-	public File getImageFile(){
-		return imageFile;
+	public Integer getNumber() {
+		return number;
 	}
 
 	/** This method is called from within the constructor to
@@ -53,8 +52,9 @@ public class MAHLIDisplayCharts extends javax.swing.JApplet {
 		jLabel = new JLabel();
 		jbtPieChart = new JButton();
 		jbtBarChart = new JButton();
-		imageIcon = new ImageIcon(getImageFile().getCanonicalPath());
-		imageIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(100, 100, BufferedImage.SCALE_SMOOTH));
+		imageFile = new File("src/MAHLI/resources/images/" + getNumber() + ".jpg");
+		imageIcon = new ImageIcon(imageFile.getCanonicalPath());
+		imageIcon = new ImageIcon(imageIcon.getImage().getScaledInstance(400, 400, BufferedImage.SCALE_SMOOTH));
 		
 		jbtPieChart.setText("View Pie Chart");
 		jbtPieChart.addActionListener(new java.awt.event.ActionListener() {
@@ -102,11 +102,12 @@ public class MAHLIDisplayCharts extends javax.swing.JApplet {
 	private JButton jbtBarChart;
 	private JButton jbtPieChart;
 	private ImageIcon imageIcon;
+	private Integer number;
+	private File imageFile;
 	// End of variables declaration//GEN-END:variables
 
 	@SuppressWarnings("static-access")
 	public void displayApplet(MAHLIDisplayCharts applet){
-		//MAHLIDisplayCharts applet = new MAHLIDisplayCharts();
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(3);
 		frame.setTitle("MAHLI Data Analysis");
@@ -114,7 +115,7 @@ public class MAHLIDisplayCharts extends javax.swing.JApplet {
 		frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
 		applet.init();
 		applet.start();
-		frame.setSize(400,320);
+		frame.setSize(400, 320);
 		frame.setLocationRelativeTo(null); // Center the frame
 		frame.setVisible(true);
 	}

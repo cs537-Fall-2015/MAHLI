@@ -6,7 +6,7 @@ import java.io.IOException;
 
 import MAHLI.MAHLIGuiApp;
 import MAHLI.MAHLIServer;
-import module1.ModuleOneServer;
+import MAHLI.ModuleOneServer;
 
 public class MasterMain {
 
