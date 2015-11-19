@@ -12,6 +12,7 @@ public class PieChart extends JPanel implements ActionListener {
 	private ChartModel model;
 	private ArrayList<Long> data =  new ArrayList<Long>();
 	private ArrayList<String> dataName = new ArrayList<String>();
+	Integer number = 0;
 	
 	public PieChart() {
 		this.setLayout(borderLayout1);

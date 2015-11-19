@@ -1,46 +1,24 @@
 package MAHLI;
 import java.awt.event.*;
-import java.io.File;
 import java.util.*;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-
-import json.ReadFromJSON;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ChartModel {
 	private ArrayList<Long> data =  new ArrayList<Long>();
 	private ArrayList<String> dataName = new ArrayList<String>();
-	String imagePath = "";
+	Integer number = 0;
 	
 	private transient Vector actionListeners;
 	
 	public ChartModel() {
 	}
 	
-	public void setData(ArrayList<Long> data) {
-		this.data = data;
+	public void setNumber(Integer number) {
+		this.number = number;
 	}
 	
-	public ArrayList<Long> getData() {
-		return data;
-	}
-	
-	public void setDataName(ArrayList<String> dataName) {
-		this.dataName = dataName;
-	}
-	
-	public ArrayList<String> getDataName() {
-		return dataName;
-	}
-	
-	public void setImagePath(String imagePath) {
-		this.imagePath = imagePath;
-	}
-	
-	public String getImagePath() {
-		return imagePath;
+	public Integer getNumber() {
+		return number;
 	}
 	
 	public synchronized void removeActionListener(ActionListener l) {
@@ -75,5 +53,21 @@ public class ChartModel {
 	    // System.arraycopy(newData, 0, data, 0, newData.length);
 	    fireActionPerformed(new ActionEvent(this,
 	      ActionEvent.ACTION_PERFORMED, null));
-	  }
+	}
+	
+	public ArrayList<Long> getData() {
+		return data;
+	}
+
+	public void setData(ArrayList<Long> data) {
+		this.data = data;
+	}
+
+	public ArrayList<String> getDataName() {
+		return dataName;
+	}
+
+	public void setDataName(ArrayList<String> dataName) {
+		this.dataName = dataName;
+	}
 }

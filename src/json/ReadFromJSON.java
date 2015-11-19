@@ -39,7 +39,7 @@ public class ReadFromJSON {
 		System.out.println("*** END OF DATA ANALYSIS ***");
 	}
 	
-	public JSONArray getJSONArray() {		
+	public JSONArray getJSONArray() {
 		return jsonArray;
 	}
 	
