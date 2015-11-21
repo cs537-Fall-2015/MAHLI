@@ -94,10 +94,17 @@ public class MAHLIServer extends RoverServerRunnable {
 					command = 15;
 				else if(message.equals("MAHLI_Image_ANALYZE"))
 					command = 16;
-				else if(message.equals("EXIT"))
-					command = 17;
-				else 
+				else if(message.equals("DAY_TIME"))
+				{
+					command = 1;
+					command = 7;
+				}
+				else if(message.equals("NIGHT_TIME"))
 					command = 18;
+				else if(message.equals("EXIT"))
+					command = 19;
+				else 
+					command = 20;
 				
 				// create ObjectOutputStream object
 				outputToAnotherObject = new ObjectOutputStream(getRoverServerSocket().getSocket().getOutputStream());
@@ -377,12 +384,14 @@ public class MAHLIServer extends RoverServerRunnable {
 		            			outputToAnotherObject.writeObject("Please turn on the camera to proceed");
 		            		}
 		                    break;
-		            case 17: // EXIT
+		       
+		            		
+		            case 19: // EXIT
 			            	exitStatus = true;
 		            		outputToAnotherObject.writeObject("Exit");
 		            		cb.done();
 		                    break;
-		            case 18: 
+		            case 20: 
 		            		outputToAnotherObject.writeObject("Invalid Command");
                     		break;
 		            default: 

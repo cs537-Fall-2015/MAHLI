@@ -39,10 +39,12 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 	/**
 	 * Create the GUI buttons, text area and layout parameters
 	 */
+	
+	
 	public class GUILayout extends JPanel implements ActionListener {
 		private static final long serialVersionUID = 1L;
 		
-		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14 , b15, b16, b17;
+		protected JButton b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, b14 , b15, b16, b17 , b18 ,b19 , b20;
 		protected JTextArea ta;
 		protected JScrollPane sp;
 
@@ -75,6 +77,9 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 	        // set the panel to be visible
 	        buttonPanel.setVisible(true);
 	        outputPanel.setVisible(true);
+	        
+	        
+	        
 	        
 	        // set the buttons parameters
 			b1 = new JButton("MAHLI_Camera_ON");
@@ -145,6 +150,18 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b17.setMnemonic(KeyEvent.VK_E);
 			b17.setActionCommand("EXIT");
 			b17.setBackground(Color.red);
+			
+			b18 = new JButton("DAY_TIME");
+			b18.setMnemonic(KeyEvent.VK_E);
+			b18.setActionCommand("DAY_TIME");
+			
+			b19 = new JButton("NIGHT_TIME");
+			b19.setMnemonic(KeyEvent.VK_E);
+			b19.setActionCommand("NIGHT_TIME");
+			
+			
+			
+			
 
 			// set and listen for button actions
 			b1.addActionListener(this);
@@ -164,6 +181,8 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			b15.addActionListener(this);
 			b16.addActionListener(this);
 			b17.addActionListener(this);
+			b18.addActionListener(this);
+			b19.addActionListener(this);
 			
 			// set the text area parameters
 			ta = new JTextArea(50, 100);
@@ -189,6 +208,8 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 	        buttonPanel.add(b15);
 	        buttonPanel.add(b16);
 	        buttonPanel.add(b17);
+	        buttonPanel.add(b18);
+	        buttonPanel.add(b19);
 	        // add the text area to the right panel
 	        outputPanel.add(sp);
 	        
@@ -196,6 +217,8 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 	        add(buttonPanel);
 	        add(outputPanel);
 		}
+		
+		
 
 		public void actionPerformed(ActionEvent e) {
 			ObjectOutputStream outputToAnotherObject = null;
@@ -204,6 +227,9 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 			String command;
 			String reply = "";
 			command = e.getActionCommand();
+			
+			
+		           
 			
 			try {
 				outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
