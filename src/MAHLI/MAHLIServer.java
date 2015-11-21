@@ -382,7 +382,7 @@ public class MAHLIServer extends RoverServerRunnable implements Serializable {
 					        	    displayCharts.init();
 					        	    displayCharts.start();
 					        	    frame.setSize(400,320);
-					        	    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+					        	    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					        	    frame.setLocationRelativeTo(null); // Center the frame
 					        	    frame.setVisible(true);
 					            		

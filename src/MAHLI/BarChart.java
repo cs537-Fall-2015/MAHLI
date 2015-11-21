@@ -1,4 +1,5 @@
 package MAHLI;
+
 import java.awt.*;
 import javax.swing.JPanel;
 import java.awt.event.*;
@@ -15,7 +16,7 @@ public class BarChart extends JPanel implements ActionListener {
 	}
 
 	// generate random color
-	public Color RandomColor(){
+	public Color RandomColor() {
 		Random random = new Random();
 
 		int r = random.nextInt(255);
@@ -30,7 +31,8 @@ public class BarChart extends JPanel implements ActionListener {
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 
-		if (model == null) return;
+		if (model == null)
+			return;
 
 		String[] dataName = model.getDataName();
 	    Long[] data = model.getData();
@@ -43,7 +45,6 @@ public class BarChart extends JPanel implements ActionListener {
 
 		int barWidth = (int)((getWidth() - 10.0) / data.length - 10);
 		int maxBarHeight = getHeight() - 30;
-
 		g.drawLine(5, getHeight() - 10, getWidth() - 5, getHeight() - 10);
 
 		int x = 15;

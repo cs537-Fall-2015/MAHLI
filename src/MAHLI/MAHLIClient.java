@@ -6,10 +6,9 @@ import java.net.UnknownHostException;
 
 import generic.RoverClientRunnable;
 
-public class MAHLIClient extends RoverClientRunnable{
+public class MAHLIClient extends RoverClientRunnable {
 
-	public MAHLIClient(int port, InetAddress host)
-			throws UnknownHostException {
+	public MAHLIClient(int port, InetAddress host) throws UnknownHostException {
 		super(port, host);
 	}
 
@@ -26,11 +25,10 @@ public class MAHLIClient extends RoverClientRunnable{
         catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (Exception error) {
+		} catch (Exception error) {
 			System.out.println("Client: Error:" + error.getMessage());
 		}
-		
+
 	}
 	
 	public void progress(int n) throws InterruptedException {
