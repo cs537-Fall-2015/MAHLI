@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-import MAHLI.ProcessImage;
 import generic.RoverClientRunnable;
 
 public class CopyOfMAHLIClient extends RoverClientRunnable {

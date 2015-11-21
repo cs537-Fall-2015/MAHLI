@@ -18,21 +18,22 @@ public class ModuleOneServer extends RoverServerRunnable {
 		try {
 			while (true) {
 				System.out.println("Module One Server: Waiting for client request");
-				
+
 				// creating socket and waiting for client connection
 				getRoverServerSocket().openSocket();
-				
+
 				// read from socket to ObjectInputStream object
-				ObjectInputStream inputFromAnotherObject = new ObjectInputStream(getRoverServerSocket().getSocket().getInputStream());
-				
+				ObjectInputStream inputFromAnotherObject = new ObjectInputStream(
+						getRoverServerSocket().getSocket().getInputStream());
+
 				// convert ObjectInputStream object to String
 				String message = (String) inputFromAnotherObject.readObject();
-				System.out.println("Module One Server: Message Received from Client - "+ message.toUpperCase());
-								
+				System.out.println("Module One Server: Message Received from Client - " + message.toUpperCase());
+
 				// close resources
 				inputFromAnotherObject.close();
-				//outputToAnotherObject.close();
-				
+				// outputToAnotherObject.close();
+
 				// terminate the server if client sends exit request
 				if (message.equalsIgnoreCase("exit"))
 					break;

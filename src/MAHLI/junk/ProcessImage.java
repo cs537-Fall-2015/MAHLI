@@ -1,4 +1,4 @@
-package MAHLI;
+package MAHLI.junk;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;

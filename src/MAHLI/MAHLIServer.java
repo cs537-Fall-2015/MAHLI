@@ -52,8 +52,6 @@ public class MAHLIServer extends RoverServerRunnable implements Serializable {
 		ReadFromJSON readJSON = new ReadFromJSON();
 		Random random = new Random();
 		Integer number = 0;
-		ChartModel chartModel;
-    	MAHLIDisplayCharts displayCharts;
 
 		try {
 			while (true) {
@@ -375,12 +373,16 @@ public class MAHLIServer extends RoverServerRunnable implements Serializable {
 					            	progress(10);
 					            	outputToAnotherObject.writeObject("Completed");
 					            	readJSON.setJSONArray(dataFile);
-					            	String[] dn = readJSON.getDataName();
-					            	Long[] d = readJSON.getData();
-					            	displayCharts = new MAHLIDisplayCharts();
-					            	displayCharts.setData(d);
-					            	displayCharts.setDataName(dn);
-					            	displayCharts.setFile(capturedFile.toString());
+					            	
+					            	MAHLIDisplayCharts displayCharts = new MAHLIDisplayCharts();
+					            	ChartModel chartModel = new ChartModel();
+					            	PieChart pieChart = new PieChart();
+					            	BarChart barChart = new BarChart();
+					            	chartModel.setData(readJSON.getData());
+					            	chartModel.setDataName(readJSON.getDataName());
+					            	pieChart.setModel(chartModel);
+					        		barChart.setModel(chartModel);
+					        		
 					            	JFrame frame = new JFrame();
 					        	    frame.setTitle("MAHLI Charts");
 					        	    frame.getContentPane().add(displayCharts, BorderLayout.CENTER);

@@ -1,4 +1,4 @@
-package MAHLI;
+package MAHLI.junk;
 
 public class ColorName {
 	public int r, g, b;

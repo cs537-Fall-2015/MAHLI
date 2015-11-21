@@ -15,7 +15,7 @@ public class ReadFromJSON {
 	JSONObject jsonObject = new JSONObject();
 	JSONArray jsonArray = new JSONArray();
 	int size;
-	Long[] data;
+	double[] data;
 	String[] dataName;
 	
 	@SuppressWarnings("unchecked")
@@ -30,8 +30,9 @@ public class ReadFromJSON {
 		while (iterator.hasNext()) {
 			JSONObject innerObject = (JSONObject) iterator.next();
 			dataName[i] = (String) innerObject.get("name");
-			data[i] = (Long) innerObject.get("count");
-			System.out.printf("%-3d %-13s %d\n", (i + 1), dataName[i], data[i]);
+			Long temp = (Long) innerObject.get("count");
+			data[i] = Double.valueOf(temp.doubleValue());
+			System.out.printf("%-3d %-13s %.2f \n", (i + 1), dataName[i], data[i]);
 			i++;
 		}
 		System.out.println("*** END OF DATA ANALYSIS ***");
@@ -51,7 +52,7 @@ public class ReadFromJSON {
 			// Create a JSONArray from the JSONObject
 			jsonArray = (JSONArray) obj;
 			size = jsonArray.size();
-			data =  new Long[size];
+			data =  new double[size];
 			dataName = new String[size];
 			
 		} catch (FileNotFoundException e) {
@@ -70,7 +71,7 @@ public class ReadFromJSON {
 		return dataName;
 	}
 	
-	public Long[] getData() {		
+	public double[] getData() {		
 		return data;
 	}
 	

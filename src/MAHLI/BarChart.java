@@ -35,10 +35,10 @@ public class BarChart extends JPanel implements ActionListener {
 			return;
 
 		String[] dataName = model.getDataName();
-	    Long[] data = model.getData();
+		double[] data = model.getData();
 
 		// Find the maximum value in the data
-		Long max = Long.valueOf(0);
+		double max = data[0];
 		for (int i = 1; i < data.length; i++){
 			max = Math.max(max, data[i]);
 		}

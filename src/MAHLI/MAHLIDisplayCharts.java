@@ -24,7 +24,6 @@ public class MAHLIDisplayCharts extends JApplet {
 	ReadFromJSON readJSON = new ReadFromJSON();
 	File dataFile = null;
 	
-	
 	/** Creates new form MAHLIDisplayCharts 
 	 * @throws IOException */
 	public MAHLIDisplayCharts() throws IOException {

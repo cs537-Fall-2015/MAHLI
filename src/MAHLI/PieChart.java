@@ -38,7 +38,7 @@ public class PieChart extends JPanel implements ActionListener {
 		int y = getHeight()/2 - radius;
 		
 		String[] dataName = model.getDataName();
-	    Long[] data = model.getData();
+		double[] data = model.getData();
 	    
 		double total = 0;
 		for (int i = 0; i < data.length; i++)
