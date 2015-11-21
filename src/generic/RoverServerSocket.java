@@ -7,33 +7,36 @@ import java.net.Socket;
 public class RoverServerSocket {
 	private ServerSocket serverSocket;
 	private Socket socket;
-	
+
 	private int port;
 
-	public RoverServerSocket(int port) throws IOException{
+	public RoverServerSocket(int port) throws IOException {
 		setPort(port);
 		serverSocket = getServerSocket();
 	}
-	public void closeAll() throws IOException{
+
+	public void closeAll() throws IOException {
 		if (serverSocket != null)
 			serverSocket.close();
-		if(socket != null)
+		if (socket != null)
 			socket.close();
 	}
-	
-	public void closeSocket() throws IOException{
-		if(socket != null)
+
+	public void closeSocket() throws IOException {
+		if (socket != null)
 			socket.close();
 	}
-	
+
 	public ServerSocket getServerSocket() throws IOException {
-		if(serverSocket == null)
+		if (serverSocket == null)
 			serverSocket = new ServerSocket(getPort());
 		return serverSocket;
 	}
-	public void openSocket() throws IOException{
+
+	public void openSocket() throws IOException {
 		setSocket(serverSocket.accept());
 	}
+
 	public int getPort() {
 		return port;
 	}
@@ -41,6 +44,7 @@ public class RoverServerSocket {
 	public void setPort(int port) {
 		this.port = port;
 	}
+
 	public Socket getSocket() {
 		return socket;
 	}

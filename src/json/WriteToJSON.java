@@ -10,19 +10,19 @@ public class WriteToJSON {
 
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
-		
+
 		// This is the object that will be stored in JSON
-		//MyClassHere myObject = new MyClassHere(5);
+		// MyClassHere myObject = new MyClassHere(5);
 		JSONArray jsonArray = new JSONArray();
 		JSONObject jsonMainObject = new JSONObject();
 		JSONObject jsonArrayObject = new JSONObject();
-		
+
 		// You need to define this filepath yourself
 		// This is where the file will be written to
 		// In this example it is written to my desktop
 		// If Example.json doesn't exist it will be created
 		String myFilePath = "C:\\Users\\hensan\\Documents\\workspace2\\MAHLI\\data2.json";
-		
+
 		jsonArrayObject.put("count", 1234);
 		jsonArrayObject.put("name", "GOLD");
 		jsonArray.add(jsonArrayObject);

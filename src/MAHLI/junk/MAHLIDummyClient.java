@@ -11,24 +11,23 @@ import java.net.UnknownHostException;
 import generic.RoverClientRunnable;
 import generic.RoverThreadHandler;
 
-public class MAHLIDummyClient extends RoverClientRunnable{
+public class MAHLIDummyClient extends RoverClientRunnable {
 
-	public MAHLIDummyClient(int port, InetAddress host)
-			throws UnknownHostException {
+	public MAHLIDummyClient(int port, InetAddress host) throws UnknownHostException {
 		super(port, host);
 	}
 
 	@Override
 	public void run() {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		try{
+		try {
 			ObjectOutputStream outputToAnotherObject = null;
-		    ObjectInputStream inputFromAnotherObject = null;
-		    Thread.sleep(5000);
-		    
-		    String command;
-		    String reply;
-		    while (true) {
+			ObjectInputStream inputFromAnotherObject = null;
+			Thread.sleep(5000);
+
+			String command;
+			String reply;
+			while (true) {
 				System.out.println("Following is the list of MAHLI Commands : ");
 				System.out.println("1. MAHLI_Camera_ON");
 				System.out.println("2. MAHLI_Camera_OFF");
@@ -48,42 +47,44 @@ public class MAHLIDummyClient extends RoverClientRunnable{
 				System.out.println("16. EXIT");
 				System.out.println("Enter Command : ");
 				command = br.readLine();
-				//System.out.println(command);
+				// System.out.println(command);
 				outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
 				outputToAnotherObject.writeObject(command);
-			    inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-	            reply = (String) inputFromAnotherObject.readObject();
-	            System.out.println(reply);
-	            if(reply.equalsIgnoreCase("exit"))
-	            	break;
-		    }
-		        
-		    
-		    /*File file = new File("CS540ColorTest.jpg");
-		    ProcessImage objprocessImage=new ProcessImage();
-		    //System.out.println(objprocessImage.getImageColor(file));
-		    
-		    
-		    outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
-		    outputToAnotherObject.writeObject("COLOR OF IMAGE IS "+objprocessImage.getImageColor(file));
-		    inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-            String message = (String) inputFromAnotherObject.readObject();
-            System.out.println("Module 1 Client: Message from  - " + message.toUpperCase());*/
-            
-            
-            inputFromAnotherObject.close();
-            outputToAnotherObject.close();
-            Thread.sleep(5000);
-	        closeAll();
-		}	        
-        catch (UnknownHostException e) {
+				inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
+				reply = (String) inputFromAnotherObject.readObject();
+				System.out.println(reply);
+				if (reply.equalsIgnoreCase("exit"))
+					break;
+			}
+
+			/*
+			 * File file = new File("CS540ColorTest.jpg"); ProcessImage
+			 * objprocessImage=new ProcessImage();
+			 * //System.out.println(objprocessImage.getImageColor(file));
+			 * 
+			 * 
+			 * outputToAnotherObject = new
+			 * ObjectOutputStream(getRoverSocket().getNewSocket().
+			 * getOutputStream()); outputToAnotherObject.writeObject(
+			 * "COLOR OF IMAGE IS "+objprocessImage.getImageColor(file));
+			 * inputFromAnotherObject = new
+			 * ObjectInputStream(getRoverSocket().getSocket().getInputStream());
+			 * String message = (String) inputFromAnotherObject.readObject();
+			 * System.out.println("Module 1 Client: Message from  - " +
+			 * message.toUpperCase());
+			 */
+
+			inputFromAnotherObject.close();
+			outputToAnotherObject.close();
+			Thread.sleep(5000);
+			closeAll();
+		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-		catch (Exception error) {
+		} catch (Exception error) {
 			System.out.println("Client: Error:" + error.getMessage());
 		}
-		
+
 	}
 
 }

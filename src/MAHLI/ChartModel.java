@@ -1,26 +1,27 @@
 package MAHLI;
+
 import java.awt.event.*;
 import java.util.*;
 
-@SuppressWarnings({"rawtypes", "unchecked"})
+@SuppressWarnings({ "rawtypes", "unchecked" })
 public class ChartModel {
-	private ArrayList<Long> data =  new ArrayList<Long>();
+	private ArrayList<Long> data = new ArrayList<Long>();
 	private ArrayList<String> dataName = new ArrayList<String>();
 	Integer number = 0;
-	
+
 	private transient Vector actionListeners;
-	
+
 	public ChartModel() {
 	}
-	
+
 	public void setNumber(Integer number) {
 		this.number = number;
 	}
-	
+
 	public Integer getNumber() {
 		return number;
 	}
-	
+
 	public synchronized void removeActionListener(ActionListener l) {
 		if (actionListeners != null && actionListeners.contains(l)) {
 			Vector v = (Vector) actionListeners.clone();
@@ -28,7 +29,7 @@ public class ChartModel {
 			actionListeners = v;
 		}
 	}
-	
+
 	public synchronized void addActionListener(ActionListener l) {
 		Vector v = actionListeners == null ? new Vector(2) : (Vector) actionListeners.clone();
 		if (!v.contains(l)) {
@@ -36,7 +37,7 @@ public class ChartModel {
 			actionListeners = v;
 		}
 	}
-	
+
 	protected void fireActionPerformed(ActionEvent e) {
 		if (actionListeners != null) {
 			Vector listeners = actionListeners;
@@ -46,15 +47,14 @@ public class ChartModel {
 			}
 		}
 	}
-	
+
 	public void setChartData(ArrayList<String> newDataName, ArrayList<Long> newData) {
-	    dataName = newDataName;
-	    data = newData;
-	    // System.arraycopy(newData, 0, data, 0, newData.length);
-	    fireActionPerformed(new ActionEvent(this,
-	      ActionEvent.ACTION_PERFORMED, null));
+		dataName = newDataName;
+		data = newData;
+		// System.arraycopy(newData, 0, data, 0, newData.length);
+		fireActionPerformed(new ActionEvent(this, ActionEvent.ACTION_PERFORMED, null));
 	}
-	
+
 	public ArrayList<Long> getData() {
 		return data;
 	}
