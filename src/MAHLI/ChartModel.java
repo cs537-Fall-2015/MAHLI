@@ -2,13 +2,23 @@ package MAHLI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.Vector;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
 public class ChartModel {
 	private transient Vector actionListeners;
+	int number;
 
 	public ChartModel() {
+	}
+	
+	public int getNumber(){
+		return number;
+	}
+	
+	public void setNumber(int number){
+		this.number = number;
 	}
 	
 	private Long[] data;

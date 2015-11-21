@@ -375,13 +375,18 @@ public class MAHLIServer extends RoverServerRunnable implements Serializable {
 					            	progress(10);
 					            	outputToAnotherObject.writeObject("Completed");
 					            	readJSON.setJSONArray(dataFile);
+					            	String[] dn = readJSON.getDataName();
+					            	Long[] d = readJSON.getData();
 					            	displayCharts = new MAHLIDisplayCharts();
-					        	    JFrame frame = new JFrame();
-					        	    frame.setTitle("Exercise35_1");
+					            	displayCharts.setData(d);
+					            	displayCharts.setDataName(dn);
+					            	displayCharts.setFile(capturedFile.toString());
+					            	JFrame frame = new JFrame();
+					        	    frame.setTitle("MAHLI Charts");
 					        	    frame.getContentPane().add(displayCharts, BorderLayout.CENTER);
 					        	    displayCharts.init();
 					        	    displayCharts.start();
-					        	    frame.setSize(400,320);
+					        	    frame.setSize(400,400);
 					        	    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 					        	    frame.setLocationRelativeTo(null); // Center the frame
 					        	    frame.setVisible(true);
