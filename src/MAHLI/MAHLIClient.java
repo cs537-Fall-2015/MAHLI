@@ -16,11 +16,9 @@ public class MAHLIClient extends RoverClientRunnable{
 	@Override
 	public void run() {
 		try{
-			ObjectOutputStream outputToAnotherObject = null;
-			
-		    outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
+			ObjectOutputStream outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
 		    outputToAnotherObject.writeObject("POWER_CAL 100");
-		    
+		    progress(100);
             outputToAnotherObject.close();
             Thread.sleep(5000);
 	        closeAll();
@@ -33,6 +31,18 @@ public class MAHLIClient extends RoverClientRunnable{
 			System.out.println("Client: Error:" + error.getMessage());
 		}
 		
+	}
+	
+	public void progress(int n) throws InterruptedException {
+        int x = 0;
+        while(x < n) {
+        	System.out.print("#");
+        	Thread.sleep(100);
+            x++; // Setting incremental values
+            if (x == n){
+            	System.out.println(" Completed"); // End message
+            }
+        }
 	}
 
 }

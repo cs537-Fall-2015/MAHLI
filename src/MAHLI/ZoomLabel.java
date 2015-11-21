@@ -87,7 +87,7 @@ public class ZoomLabel extends JPanel {
         frame.add(slider, java.awt.BorderLayout.SOUTH);
         frame.setSize(400,400);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setVisible(true);
     }
 }

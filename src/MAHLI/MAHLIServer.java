@@ -1,17 +1,28 @@
 package MAHLI;
 
+import java.awt.BorderLayout;
+import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.Random;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import callback.CallBack;
 import generic.RoverServerRunnable;
 import generic.RoverThreadHandler;
 import json.ReadFromJSON;
+import MAHLI.ZoomLabel;
 
-public class MAHLIServer extends RoverServerRunnable {
+public class MAHLIServer extends RoverServerRunnable implements Serializable {
+	private static final long serialVersionUID = 1L;
 
 	public MAHLIServer(int port) throws IOException {
 		super(port);
@@ -28,6 +39,7 @@ public class MAHLIServer extends RoverServerRunnable {
 		Boolean imageCaptureStatus = false;
 		Boolean imageStoreStatus = false;
 		Boolean imageReadStatus = false;
+		Boolean imageAnalyzeStatus = false;
 		Boolean exitStatus = false;
 		Boolean DustCoverStatus = false;
 		Boolean InfraredStatus = false;
@@ -35,16 +47,16 @@ public class MAHLIServer extends RoverServerRunnable {
 		File dataFile = null;
 		File imagesPath = new File("src/MAHLI/resources/images/");
 		File dataPath = new File("src/MAHLI/resources/data/");
-		int port_power = 9013;
+		int port_client = 9010;
 		CallBack cb = new CallBack();
 		ReadFromJSON readJSON = new ReadFromJSON();
 		Random random = new Random();
 		Integer number = 0;
-		
+		ChartModel chartModel;
+    	MAHLIDisplayCharts displayCharts;
 
 		try {
 			while (true) {
-				System.out.println("MAHLI Server: Waiting for client request");
 				int command;
 				
 				// creating socket and waiting for client connection
@@ -107,11 +119,11 @@ public class MAHLIServer extends RoverServerRunnable {
 		            		}
 		            		else {
 		            			camOnStatus = true;
-		            			MAHLIClient clientMahli = new MAHLIClient(port_power, null);
+		            			MAHLIClient clientMahli = new MAHLIClient(port_client, null);
 		            			cb.done();
-		            			Thread client_3 = RoverThreadHandler.getRoverThreadHandler().getNewThread(clientMahli);
+		            			Thread client_thread = RoverThreadHandler.getRoverThreadHandler().getNewThread(clientMahli);
 		            			outputToAnotherObject.writeObject("Camera turned On ");
-		            			client_3.start();
+		            			client_thread.start();
 		            		}
 		                    break;
 		            case 2: // CAMERA_OFF
@@ -276,13 +288,15 @@ public class MAHLIServer extends RoverServerRunnable {
 			        		}
 		                 	break;
 		            case 13: // IMAGE_CAPTURE
-		            		if( camOnStatus ) {
+		            		if(camOnStatus) {
 		        				if(DustCoverStatus == true) {
 					            	imageCaptureStatus = true;
 					            	random = new Random();
 					            	number = random.nextInt(10) + 1;
+					            	progress(25);
 					        		capturedFile = new File(imagesPath + "/" + number + ".jpg");
 					        		dataFile = new File(dataPath + "/data" + number + ".json");
+					        		imageAnalyzeStatus = true;
 					        		System.out.println("MAHLI Server: image captured - " + capturedFile);
 					            	outputToAnotherObject.writeObject("Image Captured: " + capturedFile.toString());
 					            	cb.done();
@@ -300,7 +314,8 @@ public class MAHLIServer extends RoverServerRunnable {
 				            	if(capturedFile != null) {
 				            		readJSON.setJSONArray(dataFile);
 				            		outputToAnotherObject.writeObject("Reading image data");
-				            		outputToAnotherObject.writeObject(readJSON.getJSONArray());
+				            		progress(25);
+				            		readJSON.printJSONArray();
 				            		cb.done();
 				            	}
 				            	else
@@ -312,8 +327,36 @@ public class MAHLIServer extends RoverServerRunnable {
 							break;
 		            case 15: // IMAGE_VIEW
 		            		if(camOnStatus) {
-				            	if(imagesPath.listFiles().length > 0){
-					            	
+				            	if(imageAnalyzeStatus){
+				            		outputToAnotherObject.writeObject("Viewing Image: " + capturedFile.toString());
+				            		final ZoomLabel label = new ZoomLabel();
+					                try{
+					                    Image img = javax.imageio.ImageIO.read(new File(capturedFile.toString()));
+					                    label.setImage(img);
+					                }catch(Exception e) {
+					                    System.err.println("Couldn't load image for demonstration");
+					                    e.printStackTrace();
+					                    System.exit(0);
+					                }
+
+					                JFrame frame = new JFrame();
+
+					                frame.add(new JScrollPane(label));
+
+					                JSlider slider = new JSlider(0,1000,100);
+					                slider.setPaintLabels(true);
+					                slider.addChangeListener(new ChangeListener() {
+					                    public void stateChanged(ChangeEvent e) {
+					                        int val = ((JSlider) e.getSource()).getValue();
+					                        label.setScale(val * .01f, val * .01f);
+					                    }
+					                });
+
+					                frame.add(slider, java.awt.BorderLayout.SOUTH);
+					                frame.setSize(400,400);
+					                frame.setLocationRelativeTo(null);
+					                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					                frame.setVisible(true);
 					            	cb.done();
 					            }
 				            	else
@@ -325,18 +368,24 @@ public class MAHLIServer extends RoverServerRunnable {
 		                    break;
 		            case 16: // IMAGE_ANALYZE
 		            		if(camOnStatus) {
-				            	if(dataFile.exists()){
+				            	if(imageAnalyzeStatus){
 					            	System.out.println(dataFile.toString());
 					            	outputToAnotherObject.writeObject("Image data: " + dataFile.getName() + " is analyzing.");
 					            	
 					            	progress(10);
 					            	outputToAnotherObject.writeObject("Completed");
 					            	readJSON.setJSONArray(dataFile);
-					            	ChartModel chart = new ChartModel();
-					            	chart.setNumber(number);
-					            	MAHLIDisplayCharts displayCharts = new MAHLIDisplayCharts();
-					            	displayCharts.setNumber(number);
-					            	displayCharts.displayApplet(displayCharts);
+					            	displayCharts = new MAHLIDisplayCharts();
+					        	    JFrame frame = new JFrame();
+					        	    frame.setTitle("Exercise35_1");
+					        	    frame.getContentPane().add(displayCharts, BorderLayout.CENTER);
+					        	    displayCharts.init();
+					        	    displayCharts.start();
+					        	    frame.setSize(400,320);
+					        	    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+					        	    frame.setLocationRelativeTo(null); // Center the frame
+					        	    frame.setVisible(true);
+					            		
 					            	cb.done();
 					            }
 				            	else
@@ -353,6 +402,7 @@ public class MAHLIServer extends RoverServerRunnable {
 		                    break;
 		            case 18: 
 		            		outputToAnotherObject.writeObject("Invalid Command");
+		            		cb.done();
                     		break;
 		            default: 
 		            		outputToAnotherObject.writeObject("Exit");
@@ -364,34 +414,44 @@ public class MAHLIServer extends RoverServerRunnable {
 		        // terminate the server if client sends exit request
 				if (exitStatus){
 					System.out.println("SERVER: Performing System Shutdown");
+					outputToAnotherObject.writeObject("SERVER: Performing System Shutdown");
 					if(camOnStatus){
 						System.out.println("Turning the Camera off ...");
+						outputToAnotherObject.writeObject("Turning the Camera off ...");
 					}
 					if(nightIlluminationStatus){
 						System.out.println("Turning the NightIllumination off ...");
+						outputToAnotherObject.writeObject("Turning the NightIllumination off ...");
 					}
 					if(autoFocusStatus){
 						System.out.println("Turning the Autofocus off ...");
+						outputToAnotherObject.writeObject("Turning the Autofocus off ...");
 						progress(10);
 					}
 					if(videoStatus){
 						System.out.println("Turning the Video off ...");
+						outputToAnotherObject.writeObject("Turning the Video off ...");
 					}
 					if(DustCoverStatus){
 						System.out.println("Closing the Dust Covers ...");
+						outputToAnotherObject.writeObject("Closing the Dust Covers ...");
 						progress(50);
 					}
 					if(InfraredStatus){
 						System.out.println("Turning the Infrared off ...");
+						outputToAnotherObject.writeObject("Turning the Infrared off ...");
 					}
 					System.out.println("SERVER: System Shutdown Complete");
+					outputToAnotherObject.writeObject("SERVER: System Shutdown Complete");
 					break;
 				}
 		        
-				// close resources
-				inputFromAnotherObject.close();
-				outputToAnotherObject.close();
+				
+				cb.done();
 			}
+			// close resources
+			inputFromAnotherObject.close();
+			outputToAnotherObject.close();
 			
 			// close the ServerSocket object
 			closeAll();
@@ -407,7 +467,7 @@ public class MAHLIServer extends RoverServerRunnable {
         	Thread.sleep(100);
             x++; // Setting incremental values
             if (x == n){
-            	System.out.println(" Completed"); // End message
+            	System.out.println(" Completed\n"); // End message
             }
         }
 	}

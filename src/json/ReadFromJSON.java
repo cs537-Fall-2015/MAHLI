@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,8 +14,9 @@ public class ReadFromJSON {
 	
 	JSONObject jsonObject = new JSONObject();
 	JSONArray jsonArray = new JSONArray();
-	ArrayList<Long> data =  new ArrayList<Long>();
-	ArrayList<String> dataName = new ArrayList<String>();
+	int size;
+	Long[] data;
+	String[] dataName;
 	
 	@SuppressWarnings("unchecked")
 	public void printJSONArray(){
@@ -25,15 +25,13 @@ public class ReadFromJSON {
 		System.out.println("--  ------------  -----");
 		
 		// Iterator to loop through the json array
-		int i = 1;
+		int i = 0;
 		Iterator<JSONObject> iterator = getJSONArray().iterator();
 		while(iterator.hasNext()){
 			JSONObject innerObject = (JSONObject) iterator.next();
-			String name = (String) innerObject.get("name");
-			Long count = (Long) innerObject.get("count");
-			dataName.add(name);
-			data.add(count);
-			System.out.printf("%-3d %-13s %d\n", i, name, count);
+			dataName[i] = (String) innerObject.get("name");
+			data[i] = (Long) innerObject.get("count");
+			System.out.printf("%-3d %-13s %d\n", (i + 1), dataName[i], data[i]);
 			i++;
 		}
 		System.out.println("*** END OF DATA ANALYSIS ***");
@@ -52,6 +50,9 @@ public class ReadFromJSON {
 			Object obj = parser.parse(new FileReader(file));
 			// Create a JSONArray from the JSONObject
 			jsonArray = (JSONArray) obj;
+			size = jsonArray.size();
+			data =  new Long[size];
+			dataName = new String[size];
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("No file found.");
@@ -65,11 +66,15 @@ public class ReadFromJSON {
 		}
 	}
 	
-	public ArrayList<String> getDataName() {		
+	public String[] getDataName() {		
 		return dataName;
 	}
 	
-	public ArrayList<Long> getData() {		
+	public Long[] getData() {		
 		return data;
+	}
+	
+	public int getSize() {		
+		return size;
 	}
 }

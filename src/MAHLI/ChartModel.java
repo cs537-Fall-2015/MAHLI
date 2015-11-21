@@ -1,24 +1,23 @@
 package MAHLI;
-import java.awt.event.*;
-import java.util.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Vector;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ChartModel {
-	private ArrayList<Long> data =  new ArrayList<Long>();
-	private ArrayList<String> dataName = new ArrayList<String>();
-	Integer number = 0;
-	
 	private transient Vector actionListeners;
 	
 	public ChartModel() {
 	}
 	
-	public void setNumber(Integer number) {
-		this.number = number;
+	private Long[] data;
+	
+	public void setData(Long[] data){
+		this.data = data;
 	}
 	
-	public Integer getNumber() {
-		return number;
+	public Long[] getData() {
+		return data;
 	}
 	
 	public synchronized void removeActionListener(ActionListener l) {
@@ -47,27 +46,13 @@ public class ChartModel {
 		}
 	}
 	
-	public void setChartData(ArrayList<String> newDataName, ArrayList<Long> newData) {
-	    dataName = newDataName;
-	    data = newData;
-	    // System.arraycopy(newData, 0, data, 0, newData.length);
-	    fireActionPerformed(new ActionEvent(this,
-	      ActionEvent.ACTION_PERFORMED, null));
+	private String[] dataName;
+	
+	public void setDataName(String[] dataName){
+		this.dataName = dataName;
 	}
 	
-	public ArrayList<Long> getData() {
-		return data;
-	}
-
-	public void setData(ArrayList<Long> data) {
-		this.data = data;
-	}
-
-	public ArrayList<String> getDataName() {
+	public String[] getDataName() {
 		return dataName;
-	}
-
-	public void setDataName(ArrayList<String> dataName) {
-		this.dataName = dataName;
 	}
 }

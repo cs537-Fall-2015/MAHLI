@@ -12,12 +12,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Random;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingWorker;
 
 import generic.RoverClientRunnable;
 
@@ -43,6 +45,8 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 
 		protected JTextArea ta, sta;
 		protected JScrollPane sp, ssp;
+		@SuppressWarnings("rawtypes")
+		SwingWorker worker;
 
 		public GUILayout() {
 			// set the window layout manager
@@ -215,23 +219,57 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 		public void actionPerformed(ActionEvent e) {
 			ObjectOutputStream outputToAnotherObject = null;
 			ObjectInputStream inputFromAnotherObject = null;
-			// ObjectInputStream inputFromAnotherServerObject = null;
-
+			
 			String command;
 			String reply = "";
 			command = e.getActionCommand();
+			
+			if (worker!=null){
+                worker.cancel(true);
+            }
 
 			try {
 				outputToAnotherObject = new ObjectOutputStream(getRoverSocket().getNewSocket().getOutputStream());
 				outputToAnotherObject.writeObject(command);
 				inputFromAnotherObject = new ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-				// inputFromAnotherServerObject = new
-				// ObjectInputStream(getRoverSocket().getSocket().getInputStream());
-				reply = String.valueOf(inputFromAnotherObject.readObject());
-				ta.append("MAHLI SERVER: " + reply);
-				ta.append("\n");
-				sta.append("MAHLI: " + command);
-				sta.append("\n");
+				reply = (String) inputFromAnotherObject.readObject();
+				
+				worker = new SwingWorker(){
+					protected Integer doInBackground() throws InterruptedException{
+						int x = 0;
+						Random random = new Random();
+						int n = random.nextInt(50);
+				        while(x < n) {
+				        	ta.append("=");
+				        	Thread.sleep(100);
+				            x++; // Setting incremental values
+				            if (x == n){
+				            	ta.append(" DONE\n"); // End message
+				            }
+				        }
+				        return 0;
+					}
+				};
+				worker.execute();//Schedules this SwingWorker for execution on a worker thread.
+				ta.append("MAHLI SERVER: " + reply + "\n");
+				worker = new SwingWorker(){
+					protected Integer doInBackground() throws InterruptedException{
+						int x = 0;
+						Random random = new Random();
+						int n = random.nextInt(50);
+				        while(x < n) {
+				        	sta.append("*");
+				        	Thread.sleep(100);
+				            x++; // Setting incremental values
+				            if (x == n){
+				            	sta.append(" DONE\n"); // End message
+				            }
+				        }
+				        return 0;
+					}
+				};
+				worker.execute();//Schedules this SwingWorker for execution on a worker thread.
+				sta.append("MAHLI CLIENT: " + command + "\n");
 				
 				if(reply.equalsIgnoreCase("exit")){
 					Thread.sleep(10000);
@@ -271,6 +309,18 @@ public class MAHLIGuiApp extends RoverClientRunnable {
 					createAndShowGUI();
 				}
 			});
+		}
+		
+		public void progress(int n) throws InterruptedException {
+	        int x = 0;
+	        while(x <= n) {
+	        	System.out.println("#");
+	        	Thread.sleep(100);
+	            x++; // Setting incremental values
+	            if (x == n){
+	            	System.out.println(" Completed"); // End message
+	            }
+	        }
 		}
 	}
 
